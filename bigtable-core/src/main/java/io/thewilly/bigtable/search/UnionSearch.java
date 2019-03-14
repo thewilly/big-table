@@ -26,7 +26,7 @@ public class UnionSearch implements Search {
 
 	@Override
 	public <K, V> Set<V> find( BigTable<K, V> table, @SuppressWarnings("unchecked") K... keys ) {
-Set<V> last = null;
+		Set<V> last = null;
 		
 		for(K key : keys) {
 			

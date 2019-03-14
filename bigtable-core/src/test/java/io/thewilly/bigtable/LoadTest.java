@@ -41,11 +41,11 @@ private IndexEngine longTextIndexEngine = new IndexEngine() {
 
 					if (table.getMemoryMap().containsKey(ikey)) {
 						table.getMemoryMap().get(ikey).add(value);
-						System.err.println( "Added value [" +value+ "] to key [" + ikey +"]"  );
+						//System.err.println( "Added value [" +value+ "] to key [" + ikey +"]"  );
 					} else {
 						table.getMemoryMap().put((K) ikey, new HashSet<V>());
 						table.getMemoryMap().get(ikey).add(value);
-						System.err.println( "Added key [" +ikey+ "] and value [" + value +"]"  );
+						//System.err.println( "Added key [" +ikey+ "] and value [" + value +"]"  );
 					}
 				}
 			}
@@ -54,30 +54,34 @@ private IndexEngine longTextIndexEngine = new IndexEngine() {
 		}
 	};
 	
-	BigTable<String, String> bt = new BigTableProducer<String, String>().withIndexEngine( longTextIndexEngine ).build();
+	BigTable<String, String> bt = 
+			new BigTableProducer<String, String>()
+			.withIndexEngine( longTextIndexEngine )
+			.build();
 
-	public void warmUp() {
+	@Test
+	public void warmUpLongTextIndex() {
 		String[] words = {"Pepe", "María", "fiebre", "dolor", "tiene", "barriga", "estómago", "avión"};
 		
 		Random rnd = new Random();
 		int wordindex = 0;
 		String phrase = "";
-		for(int i = 0; i < 600000; i++) {
+		
+		long initTime = System.currentTimeMillis();
+		
+		for(int i = 0; i < 1000000; i++) {
 			phrase = "";
-			for(int w = 0; w < 5; w++) {
+			for(int w = 0; w < 20; w++) {
 				wordindex = rnd.nextInt( words.length );
 				phrase = phrase + words[wordindex] + " ";
 			}
 			bt.insert( phrase, Integer.toString( i ) + "@"+phrase );
 		}
-	}
-	
-	@Test
-	public void test() {
-		warmUp();
 		
-		System.out.println(bt.getMemoryMap().size());
-		assertTrue( true );
+		long endTime = System.currentTimeMillis();
+		
+		System.out.println(endTime - initTime);
+		
+		assertTrue( endTime - initTime < 20000 );
 	}
-
 }

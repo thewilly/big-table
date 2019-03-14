@@ -27,5 +27,5 @@ public interface IndexEngine {
 	 * @param value to compute the hash
 	 * @return
 	 */
-	public <K,V> boolean index(BigTable<K, V> table, V value);
+	public <K,V> boolean index(BigTable<K, V> table, K key, V value);
 }

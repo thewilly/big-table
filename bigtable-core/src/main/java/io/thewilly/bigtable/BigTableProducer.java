@@ -21,11 +21,12 @@ public final class BigTableProducer<K,V> {
 	
 	private BigTable<K,V> _table = null;
 	
-	public void withIndexEngine(IndexEngine indexEngine) {
+	public BigTableProducer<K,V> withIndexEngine(IndexEngine indexEngine) {
 		if (_table == null)
 			_table = new BigTableImpl<>();
 		
 		_table.setIndexEngine( indexEngine );
+		return this;
 	}
 	
 	public BigTable<K,V> build() {

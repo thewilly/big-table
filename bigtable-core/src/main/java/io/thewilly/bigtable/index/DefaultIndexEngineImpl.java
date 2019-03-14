@@ -9,6 +9,8 @@
  */
 package io.thewilly.bigtable.index;
 
+import java.util.HashSet;
+
 import io.thewilly.bigtable.BigTable;
 
 /**
@@ -25,8 +27,14 @@ public class DefaultIndexEngineImpl implements IndexEngine {
 	 * @see io.thewilly.bigtable.index.IndexEngine#index(io.thewilly.bigtable.BigTable, java.lang.Object)
 	 */
 	@Override
-	public <K, V> boolean index( BigTable<K, V> table, V value ) {
-		return false;
+	public <K, V> boolean index( BigTable<K, V> table, K key, V value ) {
+		if(table.getMemoryMap().containsKey( key )) {
+			table.getMemoryMap().get( key ).add( value );
+		} else {
+			table.getMemoryMap().put( key, new HashSet<V>() );
+			this.index(table, key, value);
+		}
+		return true;
 	}
 
 }

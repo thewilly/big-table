@@ -30,13 +30,6 @@ public interface BigTable<K, V> {
 	public Map<K,Set<V>> getMemoryMap();
 
 	/**
-	 * Inserts the given value by using the default index engine or the one set.
-	 * 
-	 * @param value to insert in the table.
-	 */
-	public boolean insert( V value );
-
-	/**
 	 * Inserts the given value at the given key.
 	 * 
 	 * @param key to use as the index.

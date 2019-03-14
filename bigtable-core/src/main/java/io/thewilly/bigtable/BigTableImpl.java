@@ -9,7 +9,6 @@
  */
 package io.thewilly.bigtable;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -25,7 +24,7 @@ import io.thewilly.bigtable.search.UnionSearch;
  * @author 
  * @version 
  */
-public class BigTableImpl<K,V> implements BigTable<K, V> {
+public final class BigTableImpl<K,V> implements BigTable<K, V> {
 	
 	/**
 	 * Memory map representation to store data.
@@ -40,33 +39,19 @@ public class BigTableImpl<K,V> implements BigTable<K, V> {
 	/**
 	 * Allocates a [] object and initializes it so that it represents 
 	 */
-	public BigTableImpl() {
+	protected BigTableImpl() {
 		this._memoryMap = new TreeMap<K, Set<V>>();
 		this._indexEngine = IndexEngine.DEFAULT_ENGINE;
 	}
 	
-	/**
-	 * Returns the memory map.
-	 * @return the memory map.
-	 */
+	@Override
 	public Map<K,Set<V>> getMemoryMap() {
 		return this._memoryMap;
 	}
 
 	@Override
-	public boolean insert( V value ) {
-		return this._indexEngine.index( this, value );
-	}
-
-	@Override
 	public boolean insert( K key, V value ) {
-		if(this._memoryMap.containsKey( key )) {
-			this._memoryMap.get( key ).add( value );
-			return true;
-		} else {
-			this._memoryMap.put( key, new HashSet<V>() );
-			return insert( key, value );
-		}
+		return this._indexEngine.index( this, key, value );
 	}
 
 	@Override

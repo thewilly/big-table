@@ -30,6 +30,9 @@ public final class BigTableProducer<K,V> {
 	}
 	
 	public BigTable<K,V> build() {
+		if (_table == null)
+			_table = new BigTableImpl<>();
+		
 		BigTable<K,V> aux = this._table;
 		this._table = new BigTableImpl<>();
 		return aux;

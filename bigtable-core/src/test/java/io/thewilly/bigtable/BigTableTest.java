@@ -51,14 +51,17 @@ public class BigTableTest {
 		}
 	};
 	
-	private BigTable<String, String> database = 
+	private BigTable<String, String> customIndexTable = 
 			new BigTableProducer<String, String>()
 			.withIndexEngine( longTextIndexEngine )
 			.build();
+	
+	private BigTable<String, String> noIndexTable = new BigTableProducer<String, String>().build();
 
 	@Test
 	public void producerTest() {
-		assertNotNull( database );
+		assertNotNull( customIndexTable );
+		assertNotNull( noIndexTable );
 	}
 	
 	@Test
@@ -66,12 +69,12 @@ public class BigTableTest {
 		String[] code1 = {"1" ,"María canta alto"};
 		String[] code2 = {"2" ,"Pepe canta bajo"};
 		
-		assertTrue( database.insert( code1[1], code1[0] ));
-		assertTrue( database.insert( code2[1], code2[0] ));
+		assertTrue( customIndexTable.insert( code1[1], code1[0] ));
+		assertTrue( customIndexTable.insert( code2[1], code2[0] ));
 		
-		assertEquals(2, database.findIntersection( "canta" ).size());
-		assertEquals(1, database.findIntersection( "canta", "bajo" ).size());
-		assertEquals(2, database.findUnion( "canta", "bajo", "alto" ).size());
+		assertEquals(2, customIndexTable.findIntersection( "canta" ).size());
+		assertEquals(1, customIndexTable.findIntersection( "canta", "bajo" ).size());
+		assertEquals(2, customIndexTable.findUnion( "canta", "bajo", "alto" ).size());
 	}
 
 }

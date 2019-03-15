@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import io.thewilly.bigtable.index.IndexEngine;
 import io.thewilly.bigtable.search.IntersectionSearch;
@@ -25,7 +26,12 @@ import io.thewilly.bigtable.search.UnionSearch;
  * @version 
  */
 public final class BigTableImpl<K,V> implements BigTable<K, V> {
-	
+
+	/**
+	 * Generated serial version UID.
+	 */
+	private static final long serialVersionUID = -4192407345274521773L;
+
 	/**
 	 * Memory map representation to store data.
 	 */
@@ -83,6 +89,11 @@ public final class BigTableImpl<K,V> implements BigTable<K, V> {
 	@Override
 	public void clear() {
 		this._memoryMap.clear();
+	}
+	
+	@Override
+	public Stream<Map.Entry<K,Set<V>>> stream() {
+		return this._memoryMap.entrySet().stream();
 	}
 
 }

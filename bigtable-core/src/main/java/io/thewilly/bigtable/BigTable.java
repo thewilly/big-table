@@ -9,8 +9,10 @@
  */
 package io.thewilly.bigtable;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import io.thewilly.bigtable.index.IndexEngine;
 
@@ -20,7 +22,7 @@ import io.thewilly.bigtable.index.IndexEngine;
  * @author
  * @version
  */
-public interface BigTable<K, V> {
+public interface BigTable<K, V> extends Serializable {
 	
 	/**
 	 * Gets access to the memory map.
@@ -74,4 +76,11 @@ public interface BigTable<K, V> {
 	 * Clears all the data in the table.
 	 */
 	public void clear();
+	
+	/**
+	 * Returns the current table as a stream.
+	 * 
+	 * @return the current table as a stream.
+	 */
+	public Stream<Map.Entry<K,Set<V>>> stream();
 }

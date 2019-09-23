@@ -39,4 +39,9 @@ public final class BigTableProducer<K,V> {
 		
 	}
 
+	public BigTableProducer<K,V> asParallel() {
+		this._table = new ConcurrentBigTableImpl<>();
+		return this;
+	}
+
 }

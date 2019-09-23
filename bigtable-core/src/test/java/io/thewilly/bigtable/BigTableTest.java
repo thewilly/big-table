@@ -53,8 +53,9 @@ public class BigTableTest {
 	
 	private BigTable<String, String> customIndexTable = 
 			new BigTableProducer<String, String>()
-			.withIndexEngine( longTextIndexEngine )
-			.build();
+					.asParallel()
+					.withIndexEngine( longTextIndexEngine )
+					.build();
 	
 	private BigTable<String, String> noIndexTable = new BigTableProducer<String, String>().build();
 

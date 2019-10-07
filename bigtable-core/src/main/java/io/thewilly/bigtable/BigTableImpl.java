@@ -25,7 +25,7 @@ import io.thewilly.bigtable.search.UnionSearch;
  * @author 
  * @version 
  */
-public final class BigTableImpl<K,V> implements BigTable<K, V> {
+final class BigTableImpl<K,V> implements BigTable<K, V> {
 
 	/**
 	 * Generated serial version UID.

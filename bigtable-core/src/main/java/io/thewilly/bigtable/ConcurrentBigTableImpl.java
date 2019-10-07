@@ -13,10 +13,7 @@ import io.thewilly.bigtable.index.IndexEngine;
 import io.thewilly.bigtable.search.IntersectionSearch;
 import io.thewilly.bigtable.search.UnionSearch;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
@@ -27,7 +24,7 @@ import java.util.stream.Stream;
  * @author 
  * @version 
  */
-public final class ConcurrentBigTableImpl<K,V> implements BigTable<K, V> {
+final class ConcurrentBigTableImpl<K,V> implements BigTable<K, V> {
 
 	/**
 	 * Generated serial version UID.
@@ -72,19 +69,22 @@ public final class ConcurrentBigTableImpl<K,V> implements BigTable<K, V> {
 
 	@Override
 	public Set<V> find( K key ) {
-		if( key == null )
-			throw new IllegalArgumentException("No valid key provided");
-		
-		return this._memoryMap.get( key );
+		if( key == null || key == "")
+			return new HashSet<>();
+
+		Set<V> result = this._memoryMap.get(key);
+		return result == null ? new HashSet<V>() : result;
 	}
 
 	@Override
 	public Set<V> findIntersection( @SuppressWarnings("unchecked") K... keys ) {
+		if(keys == null || keys.length == 0) return new HashSet<>();
 		return new IntersectionSearch().find( this, keys );
 	}
 	
 	@Override
 	public Set<V> findUnion( @SuppressWarnings("unchecked") K... keys ) {
+		if(keys == null || keys.length == 0) return new HashSet<>();
 		return new UnionSearch().find( this, keys );
 	}
 

@@ -11,12 +11,14 @@ package io.thewilly.bigtable;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
 import org.junit.Test;
 
 import io.thewilly.bigtable.index.IndexEngine;
+import org.junit.runners.Parameterized;
 
 /**
  * Instance of LoadTest.java
@@ -25,16 +27,21 @@ import io.thewilly.bigtable.index.IndexEngine;
  * @version 
  */
 public class LoadTest {
+
+	@Parameterized.Parameters
+	public static int nEntries() {
+		return 1000000;
+	}
 	
-private IndexEngine longTextIndexEngine = new IndexEngine() {
+	private IndexEngine longTextIndexEngine = new IndexEngine() {
 		
 		@SuppressWarnings("unchecked")
 		@Override
 		public <K, V> boolean index( BigTable<K, V> table, K key, V value ) {
 			
 			String[] keys = key.toString().split( " " );
-			
-			for(String ikey : keys) {
+
+			Arrays.stream(keys).forEach( ikey -> {
 				ikey = ikey.toLowerCase();
 				
 				if (ikey.length() >= 3) {
@@ -48,7 +55,7 @@ private IndexEngine longTextIndexEngine = new IndexEngine() {
 						//System.err.println( "Added key [" +ikey+ "] and value [" + value +"]"  );
 					}
 				}
-			}
+			});
 			
 			return true;
 		}
@@ -69,7 +76,7 @@ private IndexEngine longTextIndexEngine = new IndexEngine() {
 		
 		long initTime = System.currentTimeMillis();
 		
-		for(int i = 0; i < 1000000; i++) {
+		for(int i = 0; i < nEntries() ; i++) {
 			phrase = "";
 			for(int w = 0; w < 20; w++) {
 				wordindex = rnd.nextInt( words.length );

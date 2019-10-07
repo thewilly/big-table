@@ -9,6 +9,7 @@
  */
 package io.thewilly.bigtable.search;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,18 +27,11 @@ public class UnionSearch implements Search {
 
 	@Override
 	public <K, V> Set<V> find( BigTable<K, V> table, @SuppressWarnings("unchecked") K... keys ) {
-		Set<V> last = null;
-		
-		for(K key : keys) {
-			
-			last = (last!=null) ? 
-					Sets.union(last, table.getMemoryMap().get( key )) 
-					: table.getMemoryMap().get( key );
-		}
-		
-		last = (last == null) ? new HashSet<V>() : last;
-		
-		return last;
+
+		return Arrays.stream(keys)
+				.map( k -> table.find( k ))
+				.reduce((a,b) -> Sets.union(a,b))
+				.get();
 	}
 
 }

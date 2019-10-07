@@ -18,12 +18,12 @@ import org.junit.Test;
 import io.thewilly.bigtable.index.IndexEngine;
 
 /**
- * Instance of BigTableTest.java
+ * Instance of BigTableProducerTest.java
  * 
  * @author 
  * @version 
  */
-public class BigTableTest {
+public class BigTableProducerTest {
 	
 	private IndexEngine longTextIndexEngine = new IndexEngine() {
 		
@@ -66,14 +66,15 @@ public class BigTableTest {
 	}
 	
 	@Test
-	public void indexTest() {
+	public void indexLiteTest() {
 		String[] code1 = {"1" ,"María canta alto"};
 		String[] code2 = {"2" ,"Pepe canta bajo"};
 		
 		assertTrue( customIndexTable.insert( code1[1], code1[0] ));
 		assertTrue( customIndexTable.insert( code2[1], code2[0] ));
-		
+
 		assertEquals(2, customIndexTable.findIntersection( "canta" ).size());
+		assertEquals(0, customIndexTable.findIntersection( "canta", "mal" ).size());
 		assertEquals(1, customIndexTable.findIntersection( "canta", "bajo" ).size());
 		assertEquals(2, customIndexTable.findUnion( "canta", "bajo", "alto" ).size());
 	}

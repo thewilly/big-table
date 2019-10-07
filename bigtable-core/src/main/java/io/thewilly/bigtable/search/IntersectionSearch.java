@@ -9,6 +9,7 @@
  */
 package io.thewilly.bigtable.search;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,24 +25,12 @@ import io.thewilly.bigtable.BigTable;
  */
 public class IntersectionSearch implements Search {
 
-
 	@Override
 	public <K, V> Set<V> find( BigTable<K, V> table, @SuppressWarnings("unchecked") K... keys ) {
-		Set<V> last = null, current = null;
-		
-		for(K key : keys) {
-			current = table.getMemoryMap().get( key );
-			
-			if(current != null) {
-				last = (last!=null) ? 
-						Sets.intersection(last, table.getMemoryMap().get( key )) 
-						: table.getMemoryMap().get( key );
-			}
-		}
-		
-		last = (last == null) ? new HashSet<V>() : last;
-		
-		return last;
-	}
 
+		return Arrays.stream(keys)
+				.map( k -> table.find( k ))
+				.reduce((a,b) -> Sets.intersection(a,b))
+				.get();
+	}
 }

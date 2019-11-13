@@ -1,0 +1,5 @@
+rootProject.name = 'bigtable'
+include 'bigtable-core'
+include 'bigtable-client'
+include 'bigtable-search'
+

@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'maven'
+}
+
+group 'io.github.thewilly'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:27.1-jre'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}

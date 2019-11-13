@@ -49,4 +49,26 @@ public class BigtableIndexRow<T extends Comparable<T>> implements Serializable {
         action.setRowToMutate(this);
         action.executeAction();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if((obj == null) || !(obj instanceof BigtableIndexRow)) {
+            return false;
+        }
+
+        BigtableIndexRow<T> castedRow = (BigtableIndexRow) obj;
+
+        if(getRowSize()!=castedRow.getRowSize()) {
+            return false;
+        }
+
+        for(int i = 0; i < _rowData.size(); i++) {
+            if(_rowData.get(i).compareTo(castedRow.getData().get(i)) != 0) {
+                return false;
+            }
+        }
+
+        // If all previous checks pass then is the same object
+        return true;
+    }
 }

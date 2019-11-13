@@ -9,15 +9,15 @@ import io.github.thewilly.bigtable.index.BigtableIndex;
  */
 public abstract class BigtableIndexAlgorithm<T extends Comparable<T>> {
 
-    private final BigtableIndex _index;
+    private final int _indexSize;
 
     /**
      * Instantiates a new Bigtable index algorithm.
      *
-     * @param index the index
+     * @param indexSize the index
      */
-    public BigtableIndexAlgorithm(BigtableIndex index) {
-        _index = index;
+    public BigtableIndexAlgorithm(int indexSize) {
+        _indexSize = indexSize;
     }
 
     /**

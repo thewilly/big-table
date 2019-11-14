@@ -53,6 +53,12 @@ public class Bigtable<T extends Comparable<T>> implements Serializable {
         return _indexes.get(indexIdentifier);
     }
 
+    /**
+     * Add index boolean.
+     *
+     * @param index the index
+     * @return the boolean
+     */
     protected boolean addIndex(BigtableIndex<T> index) {
         if(_indexes.size() == _numberOfIndexes)
             return false;

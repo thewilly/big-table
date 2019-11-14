@@ -43,6 +43,12 @@ public class CreateBigtable<T extends Comparable<T>> {
        return this;
     }
 
+    /**
+     * With index create bigtable.
+     *
+     * @param index the index
+     * @return the create bigtable
+     */
     public CreateBigtable<T> withIndex(BigtableIndex<T> index) {
         if(this.indexes == null)
             this.indexes = new ArrayList<>();

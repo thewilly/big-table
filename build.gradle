@@ -16,6 +16,8 @@ repositories {
 dependencies {
     compile 'com.google.guava:guava:27.1-jre'
 
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }

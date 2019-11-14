@@ -65,6 +65,7 @@ public class BigtableIndex<T extends Comparable<T>> {
      */
     public void mutateIndex(BigtableIndexMutation action) {
         action.setIndexToMutate(this);
+        action.executeAction();
     }
 
     /**

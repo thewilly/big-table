@@ -14,25 +14,25 @@ import java.util.stream.Stream;
  */
 public class BigtableSearchUnique<T extends Comparable<T>> extends BigtableSearch<T> {
 
-    private final T _query;
+  private final T _query;
 
-    /**
-     * Instantiates a new Bigtable search unique.
-     *
-     * @param table the table
-     * @param query the query
-     */
-    public BigtableSearchUnique(Bigtable<T> table, T query) {
-        super(table);
-        _query = query;
-    }
+  /**
+   * Instantiates a new Bigtable search unique.
+   *
+   * @param table the table
+   * @param query the query
+   */
+  public BigtableSearchUnique(Bigtable<T> table, T query) {
+    super(table);
+    _query = query;
+  }
 
-    @Override
-    public Stream<BigtableIndexRow<T>> readRows(String indexIdentifier) {
-        final BigtableIndex<T> _index = _table.getIndex(indexIdentifier);
+  @Override
+  public Stream<BigtableIndexRow<T>> readRows(String indexIdentifier) {
+    final BigtableIndex<T> _index = _table.getIndex(indexIdentifier);
 
-        Stream<BigtableIndexRow<T>> hits = Arrays.stream( _index.getHitsForElement(_query) ).parallel();
+    Stream<BigtableIndexRow<T>> hits = Arrays.stream(_index.getHitsForElement(_query)).parallel();
 
-        return hits;
-    }
+    return hits;
+  }
 }

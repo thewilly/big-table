@@ -12,25 +12,23 @@ import java.util.stream.Stream;
  */
 public abstract class BigtableSearch<T extends Comparable<T>> {
 
-    /**
-     * The Table.
-     */
-    protected final Bigtable<T> _table;
+  /** The Table. */
+  protected final Bigtable<T> _table;
 
-    /**
-     * Instantiates a new Bigtable search.
-     *
-     * @param table the table
-     */
-    public BigtableSearch(Bigtable<T> table) {
-        _table = table;
-    }
+  /**
+   * Instantiates a new Bigtable search.
+   *
+   * @param table the table
+   */
+  public BigtableSearch(Bigtable<T> table) {
+    _table = table;
+  }
 
-    /**
-     * Read rows stream.
-     *
-     * @param indexIdentifier the index identifier
-     * @return the stream
-     */
-    public abstract Stream<BigtableIndexRow<T>> readRows(String indexIdentifier);
+  /**
+   * Read rows stream.
+   *
+   * @param indexIdentifier the index identifier
+   * @return the stream
+   */
+  public abstract Stream<BigtableIndexRow<T>> readRows(String indexIdentifier);
 }

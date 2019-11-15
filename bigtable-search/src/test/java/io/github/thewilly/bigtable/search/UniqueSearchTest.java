@@ -4,8 +4,6 @@ import org.junit.Test;
 
 public class UniqueSearchTest extends AbstrctSearchTest {
 
-    @Test
-    public void searchExistingKeyTest() {
-
-    }
+  @Test
+  public void searchExistingKeyTest() {}
 }

@@ -10,27 +10,27 @@ import io.github.thewilly.bigtable.index.row.mutation.RemoveElementRowMutation;
  */
 public class RemoveElementIndexMutation<T extends Comparable<T>> extends BigtableIndexMutation<T> {
 
-    private final T _element;
+  private final T _element;
 
-    /**
-     * Instantiates a new Remove element index mutation.
-     *
-     * @param element the element
-     */
-    public RemoveElementIndexMutation(T element) {
-        super();
-        _element = element;
+  /**
+   * Instantiates a new Remove element index mutation.
+   *
+   * @param element the element
+   */
+  public RemoveElementIndexMutation(T element) {
+    super();
+    _element = element;
+  }
+
+  @Override
+  public boolean executeAction() {
+    int[] indexes = _indexToMutate.getIndexAlgorithm().computeKeys(_element);
+    BigtableIndexRowMutation rowMutation = new RemoveElementRowMutation(_element);
+
+    for (int index : indexes) {
+      rowMutation.setRowToMutate(_indexToMutate.getRowAtIndex(index));
+      rowMutation.executeAction();
     }
-
-    @Override
-    public boolean executeAction() {
-        int[] indexes = _indexToMutate.getIndexAlgorithm().computeKeys(_element);
-        BigtableIndexRowMutation rowMutation = new RemoveElementRowMutation(_element);
-
-        for(int index : indexes) {
-            rowMutation.setRowToMutate(_indexToMutate.getRowAtIndex(index));
-            rowMutation.executeAction();
-        }
-        return true;
-    }
+    return true;
+  }
 }

@@ -2,50 +2,49 @@ package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
 
-/**
- * The type Table row localizer.
- */
-public class TableRowLocalizer implements Serializable, Comparable<TableRowLocalizer> {
+/** The type Table row localizer. */
+public class TableRowLocalizer<V extends Comparable<V>>
+    implements Serializable, Comparable<TableRowLocalizer<V>> {
 
-    private final String _indexKey;
-    private final int _position;
+  private final String _indexKey;
+  private final V _value;
 
-    private TableRowLocalizer(String key, int position) {
-        _indexKey = key;
-        _position = position;
-    }
+  private TableRowLocalizer(String key, V value) {
+    _indexKey = key;
+    _value = value;
+  }
 
-    /**
-     * Gets position.
-     *
-     * @return the position
-     */
-    public int getPosition() {
-        return _position;
-    }
+  /**
+   * Gets position.
+   *
+   * @return the position
+   */
+  public V getPosition() {
+    return _value;
+  }
 
-    /**
-     * Gets index key.
-     *
-     * @return the index key
-     */
-    public String getIndexKey() {
-        return _indexKey;
-    }
+  /**
+   * Gets index key.
+   *
+   * @return the index key
+   */
+  public String getIndexKey() {
+    return _indexKey;
+  }
 
-    /**
-     * Of table row localizer.
-     *
-     * @param key      the key
-     * @param position the position
-     * @return the table row localizer
-     */
-    public static TableRowLocalizer of(String key, int position) {
-        return new TableRowLocalizer(key, position);
-    }
+  /**
+   * Of table row localizer.
+   *
+   * @param key the key
+   * @param value the position
+   * @return the table row localizer
+   */
+  public static <T extends Comparable<T>> TableRowLocalizer of(String key, T value) {
+    return new TableRowLocalizer<T>(key, value);
+  }
 
-    @Override
-    public int compareTo(TableRowLocalizer o) {
-       return _indexKey.compareTo(o._indexKey);
-    }
+  @Override
+  public int compareTo(TableRowLocalizer<V> o) {
+    return _indexKey.compareTo(o._indexKey);
+  }
 }

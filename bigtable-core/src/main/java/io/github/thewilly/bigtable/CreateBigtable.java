@@ -12,73 +12,69 @@ import java.util.List;
  */
 public class CreateBigtable<T extends Comparable<T>> {
 
-    private String tableId = "";
-    private int numberOfIndexes = -1;
-    private List<BigtableIndex<T>> indexes;
+  private String tableId = "";
+  private int numberOfIndexes = -1;
+  private List<BigtableIndex<T>> indexes;
 
-    /**
-     * Instantiates a new Create bigtable.
-     */
-    protected CreateBigtable() {}
+  /** Instantiates a new Create bigtable. */
+  protected CreateBigtable() {}
 
-    /**
-     * With name create bigtable.
-     *
-     * @param tableId the table id
-     * @return the create bigtable
-     */
-    protected CreateBigtable<T> withName(String tableId) {
-       this.tableId = tableId;
-       return this;
+  /**
+   * With name create bigtable.
+   *
+   * @param tableId the table id
+   * @return the create bigtable
+   */
+  protected CreateBigtable<T> withName(String tableId) {
+    this.tableId = tableId;
+    return this;
+  }
+
+  /**
+   * With max size create bigtable.
+   *
+   * @param numberOfIndexes the number of indexes
+   * @return the create bigtable
+   */
+  public CreateBigtable<T> withMaxSize(int numberOfIndexes) {
+    this.numberOfIndexes = numberOfIndexes;
+    return this;
+  }
+
+  /**
+   * With index create bigtable.
+   *
+   * @param index the index
+   * @return the create bigtable
+   */
+  public CreateBigtable<T> withIndex(BigtableIndex<T> index) {
+    if (this.indexes == null) this.indexes = new ArrayList<>();
+
+    this.indexes.add(index);
+
+    return this;
+  }
+
+  /**
+   * Create bigtable.
+   *
+   * @return the bigtable
+   */
+  public Bigtable<T> create() {
+    final String _tableId = tableId;
+    final int _numberOfIndexes = numberOfIndexes;
+    this.tableId = "";
+    this.numberOfIndexes = -1;
+
+    Bigtable<T> table;
+
+    if (_numberOfIndexes == -1) {
+      table = new Bigtable<T>(_tableId);
+    } else {
+      table = new Bigtable<T>(_tableId, _numberOfIndexes);
     }
+    indexes.parallelStream().forEach(index -> table.addIndex(index));
 
-    /**
-     * With max size create bigtable.
-     *
-     * @param numberOfIndexes the number of indexes
-     * @return the create bigtable
-     */
-    public CreateBigtable<T> withMaxSize(int numberOfIndexes) {
-       this.numberOfIndexes = numberOfIndexes;
-       return this;
-    }
-
-    /**
-     * With index create bigtable.
-     *
-     * @param index the index
-     * @return the create bigtable
-     */
-    public CreateBigtable<T> withIndex(BigtableIndex<T> index) {
-        if(this.indexes == null)
-            this.indexes = new ArrayList<>();
-
-        this.indexes.add(index);
-
-        return this;
-    }
-
-    /**
-     * Create bigtable.
-     *
-     * @return the bigtable
-     */
-    public Bigtable<T> create() {
-        final String _tableId = tableId;
-        final int _numberOfIndexes = numberOfIndexes;
-        this.tableId = "";
-        this.numberOfIndexes = -1;
-
-        Bigtable<T> table;
-
-        if(_numberOfIndexes == -1) {
-            table = new Bigtable<T>(_tableId);
-        } else {
-            table = new Bigtable<T>(_tableId, _numberOfIndexes);
-        }
-        indexes.parallelStream().forEach(index -> table.addIndex(index));
-
-        return table;
-    }
-
+    return table;
+  }
 }

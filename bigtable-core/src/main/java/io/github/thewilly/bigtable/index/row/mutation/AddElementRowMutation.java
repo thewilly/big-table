@@ -7,20 +7,20 @@ package io.github.thewilly.bigtable.index.row.mutation;
  */
 public class AddElementRowMutation<T extends Comparable<T>> extends BigtableIndexRowMutation<T> {
 
-    private final T _element;
+  private final T _element;
 
-    /**
-     * Instantiates a new Add element row mutation.
-     *
-     * @param element the element
-     */
-    public AddElementRowMutation(T element) {
-        super();
-        _element = element;
-    }
+  /**
+   * Instantiates a new Add element row mutation.
+   *
+   * @param element the element
+   */
+  public AddElementRowMutation(T element) {
+    super();
+    _element = element;
+  }
 
-    @Override
-    public boolean executeAction() {
-        return _rowToMutate.getData().remove(_element);
-    }
+  @Override
+  public boolean executeAction() {
+    return _rowToMutate.getData().remove(_element);
+  }
 }

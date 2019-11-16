@@ -1,6 +1,6 @@
 package io.github.thewilly.bigtable.core.models;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /** The interface Index algorithm. */
 public interface IndexAlgorithm {
@@ -12,5 +12,5 @@ public interface IndexAlgorithm {
    * @param row the row
    * @return the list
    */
-  <T extends Comparable<T>> List<TableRowLocalizer> indexRow(TableRow<T> row);
+  <T extends Comparable<T>> Stream<IndexNode> indexRow(TableRow row);
 }

@@ -1,8 +1,10 @@
 package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
+import java.util.stream.Stream;
 
-public interface Row<T extends Comparable<T>> extends Serializable, Iterable<Cell<T>> {
+/** The interface Row. */
+public interface Row extends Serializable, Iterable<Cell> {
 
   /**
    * An iterable over the cells of this row.
@@ -11,7 +13,9 @@ public interface Row<T extends Comparable<T>> extends Serializable, Iterable<Cel
    *
    * @return an iterable over the cells of this row.
    */
-  Iterable<Cell<T>> cells();
+  Iterable<Cell> iterable();
+
+  Stream<Cell> stream();
 
   /**
    * The number of columns for which data (incl. simple tombstones) is present in this row.
@@ -23,8 +27,8 @@ public interface Row<T extends Comparable<T>> extends Serializable, Iterable<Cel
   /**
    * Returns a cell for a simple column.
    *
-   * @param columnQualifier
-   * @return
+   * @param columnQualifier the column qualifier
+   * @return cell cell
    */
-  Cell<T> getCell(String columnQualifier);
+  Cell getCell(String columnQualifier);
 }

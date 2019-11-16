@@ -2,13 +2,10 @@ package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.stream.Stream;
 
-/**
- * The interface Versionable data.
- *
- * @param <T> the type parameter
- */
-public interface VersionableDataArray<T extends Comparable<T>> extends Serializable {
+/** The interface Versionable data array. */
+public interface VersionableDataArray extends Serializable {
 
   /** The constant DEFAULT_NUMBER_OF_VERSIONS. */
   int DEFAULT_NUMBER_OF_VERSIONS = 100;
@@ -18,14 +15,14 @@ public interface VersionableDataArray<T extends Comparable<T>> extends Serializa
    *
    * @return the all versions
    */
-  Collection<VersionableData<T>> getAllVersions();
+  Stream<VersionableData> getAllVersions();
 
   /**
    * Gets most recent version.
    *
    * @return the most recent version
    */
-  VersionableData<T> getMostRecentVersion();
+  VersionableData getMostRecentVersion();
 
   /**
    * Gets number of versions.
@@ -38,7 +35,7 @@ public interface VersionableDataArray<T extends Comparable<T>> extends Serializa
    * Add version.
    *
    * @param newVersion the new version
-   * @return true if added, false otherwise.
+   * @return null if no value was present or the value of the previous version.
    */
-  boolean addVersion(VersionableData<T> newVersion);
+  VersionableData addVersion(VersionableData newVersion);
 }

@@ -3,7 +3,6 @@ package io.github.thewilly.bigtable.core.models;
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,7 +20,7 @@ public class TableImpl<T extends Comparable<T>> implements Table<T> {
   private final Logger log = LoggerFactory.getLogger(TableImpl.class);
 
   private final String _id;
-  private final List<TableRow<T>> _rows;
+  private final List<TableRow> _rows;
   private final List<String> _columnQualifiers;
 
   /**
@@ -41,13 +40,23 @@ public class TableImpl<T extends Comparable<T>> implements Table<T> {
   }
 
   @Override
-  public List<TableRow<T>> getRows() {
-    return _rows;
+  public Stream<TableRow> getRows() {
+    return _rows.parallelStream();
   }
 
   @Override
-  public Collection<String> getColumns() {
-    return _columnQualifiers;
+  public Stream<String> getColumns() {
+    return _columnQualifiers.parallelStream();
+  }
+
+  /**
+   * Scan table list.
+   *
+   * @param filter the filter
+   * @return the list
+   */
+  public List<TableRow> scanTable(Predicate<TableRow> filter) {
+    return scanTableAsync(filter).collect(Collectors.toList());
   }
 
   /**
@@ -58,15 +67,5 @@ public class TableImpl<T extends Comparable<T>> implements Table<T> {
    */
   public Stream<TableRow<T>> scanTableAsync(Predicate<TableRow<T>> filter) {
     return _rows.parallelStream().filter(filter);
-  }
-
-  /**
-   * Scan table list.
-   *
-   * @param filter the filter
-   * @return the list
-   */
-  public List<TableRow<T>> scanTable(Predicate<TableRow<T>> filter) {
-    return scanTableAsync(filter).collect(Collectors.toList());
   }
 }

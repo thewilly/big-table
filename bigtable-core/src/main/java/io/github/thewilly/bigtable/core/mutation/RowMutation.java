@@ -7,6 +7,10 @@ public class RowMutation {
 
   private final TableRow _rowToMutate;
 
+  private RowMutation(TableRow rowToMutate) {
+    _rowToMutate = rowToMutate;
+  }
+
   /**
    * Create row mutation.
    *
@@ -16,10 +20,6 @@ public class RowMutation {
    */
   public static <T extends Comparable<T>> RowMutation create(TableRow<T> table) {
     return new RowMutation(table);
-  }
-
-  private RowMutation(TableRow rowToMutate) {
-    _rowToMutate = rowToMutate;
   }
 
   /**

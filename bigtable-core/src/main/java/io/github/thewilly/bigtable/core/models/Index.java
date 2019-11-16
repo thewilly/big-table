@@ -2,16 +2,16 @@ package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
 
-/** The type Index. */
-public class Index<ValueType extends Comparable<ValueType>> implements Serializable {
+/** The type Index. @param <ValueType> the type parameter @param <ValueType> the type parameter */
+public class Index implements Serializable {
 
   private final String _id;
-  private final IndexTree<TableRowLocalizer<ValueType>> _localizers;
+  private final IndexTree _localizers;
   private final IndexAlgorithm _indexAlgorithm;
 
   private Index(String id, IndexAlgorithm indexAlgorithm) {
     _id = id;
-    _localizers = new IndexTree<>();
+    _localizers = new IndexTree();
     _indexAlgorithm = indexAlgorithm;
   }
 
@@ -43,8 +43,9 @@ public class Index<ValueType extends Comparable<ValueType>> implements Serializa
    * @param indexKey the index key
    * @return the table row localizer
    */
-  public TableRowLocalizer find(String indexKey) {
-    return _localizers.searchAndReturn(TableRowLocalizer.of(indexKey, -1));
+  public IndexNode find(String indexKey) {
+    Cell auxCell = new RowCell("");
+    return _localizers.getIfPresent(IndexNode.of(indexKey, auxCell));
   }
 
   /**

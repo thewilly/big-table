@@ -21,24 +21,6 @@ public class BigtableIndexRow<T extends Comparable<T>> implements Serializable {
   }
 
   /**
-   * Gets data.
-   *
-   * @return the data
-   */
-  public List<T> getData() {
-    return _rowData;
-  }
-
-  /**
-   * Gets row size.
-   *
-   * @return the row size
-   */
-  public int getRowSize() {
-    return _rowData.size();
-  }
-
-  /**
    * Mutate row.
    *
    * @param action the action
@@ -68,5 +50,23 @@ public class BigtableIndexRow<T extends Comparable<T>> implements Serializable {
 
     // If all previous checks pass then is the same object
     return true;
+  }
+
+  /**
+   * Gets row size.
+   *
+   * @return the row size
+   */
+  public int getRowSize() {
+    return _rowData.size();
+  }
+
+  /**
+   * Gets data.
+   *
+   * @return the data
+   */
+  public List<T> getData() {
+    return _rowData;
   }
 }

@@ -8,6 +8,10 @@ public class TableMutation {
 
   private final TableImpl _tableToMutate;
 
+  private TableMutation(TableImpl tableToMutate) {
+    _tableToMutate = tableToMutate;
+  }
+
   /**
    * Create table mutation.
    *
@@ -17,10 +21,6 @@ public class TableMutation {
    */
   public static <T extends Comparable<T>> TableMutation create(TableImpl<T> table) {
     return new TableMutation(table);
-  }
-
-  private TableMutation(TableImpl tableToMutate) {
-    _tableToMutate = tableToMutate;
   }
 
   /**

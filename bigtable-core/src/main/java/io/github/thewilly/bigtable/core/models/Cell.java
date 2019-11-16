@@ -7,8 +7,9 @@ import java.util.Comparator;
  * A cell is a unit of storage for bigtable, it consists of the following fields: 1) column
  * qualifier 2) timestamp 3) number of versions 4) versions
  */
-public interface Cell<T extends Comparable<T>> extends Serializable, Comparable<Cell<T>> {
+public interface Cell extends Serializable, Comparable<Cell> {
 
+  /** The Default comparator. */
   Comparator<Cell> DEFAULT_COMPARATOR = Comparator.comparing(Cell::getColumnQualifier);
 
   /**
@@ -37,14 +38,14 @@ public interface Cell<T extends Comparable<T>> extends Serializable, Comparable<
    *
    * @return the data contained by the cell.
    */
-  VersionableDataArray<T> getDataVersions();
+  VersionableDataArray getDataVersions();
 
   /**
    * Adds a new data version to the cell by invalidating the previous one and seting this one as the
    * valid current one.
    *
    * @param data is the data version to add to the cell.
-   * @return true if added. false otherwise.
+   * @return the previous version of the data stored or null if none.
    */
-  boolean addDataVersion(VersionableData<T> data);
+  VersionableData addDataVersion(VersionableData data);
 }

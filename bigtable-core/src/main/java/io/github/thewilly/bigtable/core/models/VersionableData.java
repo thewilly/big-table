@@ -2,12 +2,8 @@ package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
 
-/**
- * The interface Data version.
- *
- * @param <T> the type parameter
- */
-public interface VersionableData<T extends Comparable<T>> extends Serializable {
+/** The interface Data version. */
+public interface VersionableData extends Serializable {
 
   /**
    * Is valid boolean. True if the data version is the most recent one, false otherwise.
@@ -32,5 +28,5 @@ public interface VersionableData<T extends Comparable<T>> extends Serializable {
    *
    * @return the the value of the version of the data.
    */
-  T get();
+  byte[] get();
 }

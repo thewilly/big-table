@@ -1,20 +1,16 @@
 package io.github.thewilly.bigtable.core.models;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
-/**
- * The type Index tree.
- *
- * @param <T> the type parameter
- */
-public class IndexTree<T extends Comparable<T>> implements Serializable {
+/** The type Index tree. */
+public class IndexTree implements Tree {
 
   /** The root node. */
-  private IndexTreeNode<T> rootNode;
+  private IndexTreeNode rootNode;
 
   /** Main Constructor. It doesn't need any parameter. will create an AVL Tree with a null root. */
   public IndexTree() {
@@ -26,7 +22,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    *
    * @param root of the tree
    */
-  public IndexTree(T root) {
+  public IndexTree(IndexNode root) {
     setRootNode(null);
     add(root);
   }
@@ -37,8 +33,8 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param elements to create the tree.
    */
   @SafeVarargs
-  public IndexTree(T... elements) {
-    for (T element : elements) {
+  public IndexTree(IndexNode... elements) {
+    for (IndexNode element : elements) {
       this.add(element);
     }
   }
@@ -48,7 +44,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    *
    * @return the AVLNode that represents the root of the tree if there is. Otherwise null.
    */
-  private IndexTreeNode<T> getRootNode() {
+  private IndexTreeNode getRootNode() {
     return this.rootNode;
   }
 
@@ -58,210 +54,36 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    *
    * @param root AVLNode to be the root of the tree.
    */
-  private void setRootNode(IndexTreeNode<T> root) {
+  private void setRootNode(IndexTreeNode root) {
     this.rootNode = root;
   }
 
-  /**
-   * Adds an element to the tree. By calling the recursive and private method add(AVLNode<T> root, T
-   * element), that will return the top node of the tree.
-   *
-   * @param content to be added to the tree.
-   * @throws IllegalArgumentException the illegal argument exception
-   */
-  public void add(T content) throws IllegalArgumentException {
+  @Override
+  public void add(IndexNode content) throws IllegalArgumentException {
     setRootNode(add(getRootNode(), content));
   }
 
-  /**
-   * Recursive add method. If the root given is null it will create a new AVLNode assigning the
-   * value of the node we want to add there. If not will allocate the element in its place and then
-   * will return again the root.
-   *
-   * @param root of the AVL tree.
-   * @param content to be added to the tree.
-   * @return the root of the tree.
-   * @throws IllegalArgumentException the illegal argument exception
-   */
-  private IndexTreeNode<T> add(IndexTreeNode<T> root, T content) throws IllegalArgumentException {
-    if (content == null) {
-      throw new IllegalArgumentException("The element you want to add was null.");
-    } else if (root == null) {
-      return new IndexTreeNode<T>(content);
-    } else if (root.getContent().equals(content)) {
-      throw new IllegalArgumentException("No repeated elements are allowed inside a tree.");
-    } else if (content.compareTo(root.getContent()) < 0) {
-      root.setLeft(add(root.getLeft(), content));
-    } else {
-      root.setRight(add(root.getRight(), content));
-    }
-    return (this.updateBalanceFactor(root));
-  }
-
-  /**
-   * Public toString method. Returns a string representation of the object. In general, the toString
-   * method returns a string that "textually represents" this object. The result should be a concise
-   * but informative representation that is easy for a person to read. It is recommended that all
-   * subclasses override this method. In this case the default format is: root+left+right and null
-   * pointers as "-" (dash). (Pre-Order)
-   *
-   * @return toString private and recursive method
-   */
   @Override
-  public String toString() {
-    return toString(rootNode);
-  }
-
-  /**
-   * toString private recursive method. While the root is different from null the method will
-   * continue traversing the tree and adding the nodes to the StringBuilder. Instead of String
-   * concatenation it uses StringBuilder because as it is a recursive method we improve the
-   * performance.
-   *
-   * @param root the root
-   * @return null if root = null. Otherwise: "root+left+right". Pre-Order.
-   */
-  private String toString(IndexTreeNode<T> root) {
-    StringBuilder str = new StringBuilder();
-    if (root == null) {
-      str.append("-");
-    } else {
-      str.append(root.toString());
-      str.append(toString(root.getLeft())).append(toString(root.getRight()));
-    }
-    return str.toString();
-  }
-
-  /**
-   * Search method. Given a T element it returns true if the element is in the tree. False
-   * otherwise.
-   *
-   * @param content the content
-   * @return true if the element is in the tree, false otherwise.
-   */
-  public boolean contains(T content) {
+  public boolean contains(IndexNode content) {
     return contains(content, getRootNode());
   }
 
-  /**
-   * Search private and reflexive method. Given a T element and a root it checks if the T element is
-   * in the tree.
-   *
-   * @param content the content
-   * @param root the root
-   * @return true if the element is in the tree, false otherwise.
-   */
-  private boolean contains(T content, IndexTreeNode<T> root) {
-    if (root == null || content == null) {
-      return false;
-    } else if (root.getContent().equals(content)) {
-      return true;
-    } else if (content.compareTo(root.getContent()) < 0) {
-      return contains(content, root.getLeft());
-    } else if (content.compareTo(root.getContent()) > 0) {
-      return contains(content, root.getRight());
-    }
-    return false;
-  }
-
-  /**
-   * Search and Return method. If the element is in the tree then it search for the element in the
-   * tree and returns it.
-   *
-   * @param element the element
-   * @return the t
-   */
-  public T getIfPresent(T element) {
+  @Override
+  public IndexNode getIfPresent(IndexNode element) {
     if (contains(element)) return getIfPresent(element, getRootNode());
     else return null;
   }
 
-  /**
-   * Search and return private and reflexive method. Given a T element and a root it returns the
-   * element.
-   *
-   * @param element the element
-   * @param root the root
-   * @return The element you are looking for.
-   */
-  private T getIfPresent(T element, IndexTreeNode<T> root) {
-    if (root.getContent().equals(element)) {
-      return root.getContent();
-    } else if (element.compareTo(root.getContent()) < 0) {
-      return getIfPresent(element, root.getLeft());
-    } else {
-      return getIfPresent(element, root.getRight());
-    }
-  }
-
-  /**
-   * Get the maximum value in the tree. Calls the recursive and private method T getMax(AVLNode<T>
-   * root).
-   *
-   * @return the maximum value in the tree.
-   */
-  private T getMax() {
-    return getMax(getRootNode());
-  }
-
-  /**
-   * Private and recursive getMax Method, gets the maximum value in the tree by means of recursion.
-   * Notice that the max value of a tree is always allocated at the bottom right position.
-   *
-   * @param root of the tree.
-   * @return the maximum value of the tree.
-   */
-  private T getMax(IndexTreeNode<T> root) {
-    if (root == null) {
-      return null;
-    } else if (root.getRight() != null) {
-      return getMax(root.getRight());
-    }
-    return root.getContent();
-  }
-
-  /**
-   * Travels the Tree in order, that is: leftSubTtree + root + rightSubTree. Null leaves will be
-   * represented as "-".
-   *
-   * <p>Procedure: Traverse the left subtree by recursively calling the in-order function. Display
-   * the data part of root element (or current element). Traverse the right subtree by recursively
-   * calling the in-order function
-   *
-   * @return the result of traveling all the tree in order from the top root.
-   */
+  @Override
   public String getInOrderTraversal() {
     return getInOrderTraversal(this.getRootNode());
   }
 
-  /**
-   * Recursive method to traverse the tree from a given root. It travels in order as left + root +
-   * right. Null leaves will be represented as "-"
-   *
-   * @param root of the tree or subtree.
-   * @return an String containing all the traverse path.
-   */
-  private String getInOrderTraversal(IndexTreeNode<T> root) {
-    StringBuilder aux = new StringBuilder();
-    if (root == null) return "-";
-
-    aux.append(getInOrderTraversal(root.getLeft()));
-    aux.append(root.getContent());
-    aux.append(getInOrderTraversal(root.getRight()));
-
-    return aux.toString();
-  }
-
-  /**
-   * Public and not reflexive remove method. Given an element as a paramenter it removes it from the
-   * tree.
-   *
-   * @param content the content
-   */
-  public void remove(T content) {
+  @Override
+  public void remove(IndexNode content) {
     setRootNode(remove(rootNode, content));
   }
-
+  
   /**
    * Private and reflexive remove method. Given an element as a parameter and a root it removes the
    * element from the tree.
@@ -270,7 +92,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param content the content
    * @return the deleted node.
    */
-  public IndexTreeNode<T> remove(IndexTreeNode<T> root, T content) {
+  public IndexTreeNode remove(IndexTreeNode root, IndexNode content) {
     if (!contains(content)) {
       throw new IllegalArgumentException("The provided element is not in the tree.");
     } else if (root == null) {
@@ -292,16 +114,183 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
     return (updateBalanceFactor(root));
   }
 
-  /**
-   * Given the actual tree and a tree as a parameter will return another tree that will be the
-   * composition of both trees.
-   *
-   * @param tree the tree
-   * @return a tree containing all the nodes in the first and the second tree.
-   */
-  public IndexTree<T> join(IndexTree<T> tree) {
-    IndexTree<T> joinTree = this.clone();
+  @Override
+  public IndexTree join(IndexTree tree) {
+    IndexTree joinTree = this.clone();
     return join(joinTree, tree);
+  }
+
+  @Override
+  public int getHeight() {
+    return getHeight(this.getRootNode());
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return (rootNode == null);
+  }
+
+  @Override
+  public List<IndexNode> toList() {
+    return toList(new ArrayList<IndexNode>(), this.getRootNode());
+  }
+
+  @Override
+  public List<IndexNode> toList(Comparator<IndexNode> comparator) {
+    List<IndexNode> toReturn = new ArrayList<IndexNode>();
+    toReturn = toList(toReturn, this.getRootNode());
+    Collections.sort(toReturn, comparator);
+    return toReturn;
+  }
+
+  @Override
+  public Stream<IndexNode> stream() {
+    return this.toList().parallelStream();
+  }
+
+  @Override
+  public int size() {
+    return size(this.getRootNode());
+  }
+
+  @Override
+  public IndexTree difference(IndexTree secondTree) {
+    IndexTree toReturn = new IndexTree();
+    for (IndexNode element : this.toList()) {
+      if (!secondTree.contains(element)) toReturn.add(element);
+    }
+    for (IndexNode element : secondTree.toList()) {
+      if (!this.contains(element)) toReturn.add(element);
+    }
+    return toReturn;
+  }
+
+  /**
+   * Recursive add method. If the root given is null it will create a new AVLNode assigning the
+   * value of the node we want to add there. If not will allocate the element in its place and then
+   * will return again the root.
+   *
+   * @param root of the AVL tree.
+   * @param content to be added to the tree.
+   * @return the root of the tree.
+   * @throws IllegalArgumentException the illegal argument exception
+   */
+  private IndexTreeNode add(IndexTreeNode root, IndexNode content) throws IllegalArgumentException {
+    if (content == null) {
+      throw new IllegalArgumentException("The element you want to add was null.");
+    } else if (root == null) {
+      return new IndexTreeNode(content);
+    } else if (root.getContent().equals(content)) {
+      throw new IllegalArgumentException("No repeated elements are allowed inside a tree.");
+    } else if (content.compareTo(root.getContent()) < 0) {
+      root.setLeft(add(root.getLeft(), content));
+    } else {
+      root.setRight(add(root.getRight(), content));
+    }
+    return (this.updateBalanceFactor(root));
+  }
+
+  /**
+   * toString private recursive method. While the root is different from null the method will
+   * continue traversing the tree and adding the nodes to the StringBuilder. Instead of String
+   * concatenation it uses StringBuilder because as it is a recursive method we improve the
+   * performance.
+   *
+   * @param root the root
+   * @return null if root = null. Otherwise: "root+left+right". Pre-Order.
+   */
+  private String toString(IndexTreeNode root) {
+    StringBuilder str = new StringBuilder();
+    if (root == null) {
+      str.append("-");
+    } else {
+      str.append(root.toString());
+      str.append(toString(root.getLeft())).append(toString(root.getRight()));
+    }
+    return str.toString();
+  }
+
+  /**
+   * Search private and reflexive method. Given a T element and a root it checks if the T element is
+   * in the tree.
+   *
+   * @param content the content
+   * @param root the root
+   * @return true if the element is in the tree, false otherwise.
+   */
+  private boolean contains(IndexNode content, IndexTreeNode root) {
+    if (root == null || content == null) {
+      return false;
+    } else if (root.getContent().equals(content)) {
+      return true;
+    } else if (content.compareTo(root.getContent()) < 0) {
+      return contains(content, root.getLeft());
+    } else if (content.compareTo(root.getContent()) > 0) {
+      return contains(content, root.getRight());
+    }
+    return false;
+  }
+
+  /**
+   * Search and return private and reflexive method. Given a T element and a root it returns the
+   * element.
+   *
+   * @param element the element
+   * @param root the root
+   * @return The element you are looking for.
+   */
+  private IndexNode getIfPresent(IndexNode element, IndexTreeNode root) {
+    if (root.getContent().equals(element)) {
+      return root.getContent();
+    } else if (element.compareTo(root.getContent()) < 0) {
+      return getIfPresent(element, root.getLeft());
+    } else {
+      return getIfPresent(element, root.getRight());
+    }
+  }
+
+  /**
+   * Get the maximum value in the tree. Calls the recursive and private method T getMax(AVLNode<T>
+   * root).
+   *
+   * @return the maximum value in the tree.
+   */
+  private IndexNode getMax() {
+    return getMax(getRootNode());
+  }
+
+  /**
+   * Private and recursive getMax Method, gets the maximum value in the tree by means of recursion.
+   * Notice that the max value of a tree is always allocated at the bottom right position.
+   *
+   * @param root of the tree.
+   * @return the maximum value of the tree.
+   */
+  private IndexNode getMax(IndexTreeNode root) {
+    if (root == null) {
+      return null;
+    } else if (root.getRight() != null) {
+      return getMax(root.getRight());
+    }
+    return root.getContent();
+  }
+
+  /**
+   * Recursive method to traverse the tree from a given root. It travels in order as left + root +
+   * right. Null leaves will be represented as "-"
+   *
+   * @param root of the tree or subtree.
+   * @return an String containing all the traverse path.
+   */
+  private String getInOrderTraversal(IndexTreeNode root) {
+    StringBuilder aux = new StringBuilder();
+    if (root == null) return "-";
+
+    aux.append(getInOrderTraversal(root.getLeft()));
+    aux.append(root.getContent());
+    aux.append(getInOrderTraversal(root.getRight()));
+
+    return aux.toString();
   }
 
   /**
@@ -318,16 +307,16 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @return a tree containing all the nodes from tree1 and tree2. Following the rules of the AVL
    *     trees, that is: No repeated elements, ordered as BST...
    */
-  private IndexTree<T> join(IndexTree<T> tree1, IndexTree<T> tree2) {
-    IndexTreeNode<T> joinRoot = tree2.getRootNode();
+  private IndexTree join(IndexTree tree1, IndexTree tree2) {
+    IndexTreeNode joinRoot = tree2.getRootNode();
     if (joinRoot != null) {
       if (!tree1.contains(joinRoot.getContent())) tree1.add(joinRoot.getContent());
 
-      IndexTree<T> treeL = new IndexTree<T>();
+      IndexTree treeL = new IndexTree();
       treeL.setRootNode(joinRoot.getLeft());
       tree1.join(tree1, treeL);
 
-      IndexTree<T> treeR = new IndexTree<T>();
+      IndexTree treeR = new IndexTree();
       treeR.setRootNode(joinRoot.getRight());
       tree1.join(tree1, treeR);
     }
@@ -340,7 +329,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root the root
    * @return processRotations(node) index tree node
    */
-  private IndexTreeNode<T> updateBalanceFactor(IndexTreeNode<T> root) {
+  private IndexTreeNode updateBalanceFactor(IndexTreeNode root) {
     root.updateHeight();
     return computeRotations(root);
   }
@@ -351,7 +340,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root the root
    * @return single[Left / Right]Rotation(root)
    */
-  private IndexTreeNode<T> computeRotations(IndexTreeNode<T> root) {
+  private IndexTreeNode computeRotations(IndexTreeNode root) {
     if (root.getBalanceFactor() == -2) {
       if (root.getLeft().getBalanceFactor() <= 0) return singleLeftRotation(root);
       else return doubleLeftRotation(root);
@@ -369,8 +358,8 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root the root
    * @return Balanced subtree.
    */
-  private IndexTreeNode<T> singleLeftRotation(IndexTreeNode<T> root) {
-    IndexTreeNode<T> aux = root.getLeft();
+  private IndexTreeNode singleLeftRotation(IndexTreeNode root) {
+    IndexTreeNode aux = root.getLeft();
     root.setLeft(aux.getRight());
     aux.setRight(root);
     root = aux;
@@ -385,8 +374,8 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root the root
    * @return Balanced subtree.
    */
-  private IndexTreeNode<T> singleRightRotation(IndexTreeNode<T> root) {
-    IndexTreeNode<T> aux = root.getRight();
+  private IndexTreeNode singleRightRotation(IndexTreeNode root) {
+    IndexTreeNode aux = root.getRight();
     root.setRight(aux.getLeft());
     aux.setLeft(root);
     root = aux;
@@ -401,8 +390,8 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root the root
    * @return balanced subtree
    */
-  private IndexTreeNode<T> doubleLeftRotation(IndexTreeNode<T> root) {
-    IndexTreeNode<T> aux = root.getLeft().getRight();
+  private IndexTreeNode doubleLeftRotation(IndexTreeNode root) {
+    IndexTreeNode aux = root.getLeft().getRight();
 
     root.getLeft().setRight(aux.getLeft());
     aux.setLeft(root.getLeft());
@@ -422,8 +411,8 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root the root
    * @return balanced subtree
    */
-  private IndexTreeNode<T> doubleRightRotation(IndexTreeNode<T> root) {
-    IndexTreeNode<T> aux = root.getRight().getLeft();
+  private IndexTreeNode doubleRightRotation(IndexTreeNode root) {
+    IndexTreeNode aux = root.getRight().getLeft();
 
     root.getRight().setLeft(aux.getRight());
     aux.setRight(root.getRight());
@@ -438,18 +427,6 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
   }
 
   /**
-   * Get Height method. Returns the height of the tree without accessing to the node parameters. To
-   * perform that it calls to the private and reflexive getHeight() method with the root of the tree
-   * as a parameter.
-   *
-   * @return the height of the tree as an integer.
-   * @important The method considers the height of a single leaf as 0.
-   */
-  public int getHeight() {
-    return getHeight(this.getRootNode());
-  }
-
-  /**
    * Get Height [ PRIVATE AND REFLEXIVE ]. It returns the height of the tree without accessing to
    * the node parameters.
    *
@@ -457,7 +434,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @return the height as an integer.
    * @important The method considers the height of a single leaf as 0.
    */
-  private int getHeight(IndexTreeNode<T> root) {
+  private int getHeight(IndexTreeNode root) {
     // If the tree is empty...
     if (root == null) return 0;
 
@@ -472,23 +449,14 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
     else return 1 + getHeight(root.getRight());
   }
 
-  /**
-   * If the root of a tree is null means that the tree is empty.
-   *
-   * @return whether a tree is empty or not.
-   */
-  public boolean isEmpty() {
-    return (rootNode == null);
+  @Override
+  public IndexTree clone() {
+    return clone(new IndexTree(), this.getRootNode());
   }
 
-  /**
-   * Returns a pointer to an auxiliary tree containing all the elements as this tree.
-   *
-   * @return an auxiliary tree containing all the elements on the working tree.
-   */
-  public IndexTree<T> clone() {
-    IndexTree<T> copy = new IndexTree<T>();
-    return clone(copy, this.getRootNode());
+  @Override
+  public String toString() {
+    return toString(rootNode);
   }
 
   /**
@@ -498,7 +466,7 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
    * @param root to start working to make the copy.
    * @return the aux tree.
    */
-  private IndexTree<T> clone(IndexTree<T> tree, IndexTreeNode<T> root) {
+  private IndexTree clone(IndexTree tree, IndexTreeNode root) {
     if (root != null) {
       tree.add(root.getContent());
       clone(tree, root.getLeft());
@@ -508,24 +476,13 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
   }
 
   /**
-   * The current tree as a List shorted.
-   *
-   * @return the current tree as a list shorted with the default type comparator.
-   */
-  public List<T> toList() {
-    List<T> toReturn = new ArrayList<T>();
-    toReturn = toList(toReturn, this.getRootNode());
-    return toReturn;
-  }
-
-  /**
    * Private and recursive method to get the tree as a List.
    *
    * @param list where the elements will be stored.
    * @param root of the working tree.
    * @return the list containing all the elements not shorted.
    */
-  private List<T> toList(List<T> list, IndexTreeNode<T> root) {
+  private List<IndexNode> toList(List<IndexNode> list, IndexTreeNode root) {
     if (root != null) {
       list.add(root.getContent());
       toList(list, root.getLeft());
@@ -535,54 +492,13 @@ public class IndexTree<T extends Comparable<T>> implements Serializable {
   }
 
   /**
-   * The current tree as a List shorted.
-   *
-   * @param comparator used to sort the list.
-   * @return the current tree as a list sorted by the custom comparator.
-   */
-  public List<T> toList(Comparator<T> comparator) {
-    List<T> toReturn = new ArrayList<T>();
-    toReturn = toList(toReturn, this.getRootNode());
-    Collections.sort(toReturn, comparator);
-    return toReturn;
-  }
-
-  /**
-   * Given a tree this method will give the number of nodes that contains.
-   *
-   * @return the number of nodes contained by the tree.
-   */
-  public int size() {
-    return size(this.getRootNode());
-  }
-
-  /**
    * Given a tree and the root of it this method will return the number of nodes that contains.
    *
    * @param root of the tree.
    * @return the number of nodes contained by the tree.
    */
-  private int size(IndexTreeNode<T> root) {
+  private int size(IndexTreeNode root) {
     if (root == null) return 0;
     return (1 + size(root.getLeft()) + size(root.getRight()));
-  }
-
-  /**
-   * Returns an AVLTree containing the different elements from one tree and another.
-   *
-   * @param secondTree is the second AVLTree to get the different elements.
-   * @return An AVLTree that contains all the elements that are not contained in the other tree. And
-   *     works in both ways, elements that are in the first but not in the second and elements that
-   *     are in the second but not in the first.
-   */
-  public IndexTree<T> difference(IndexTree<T> secondTree) {
-    IndexTree<T> toReturn = new IndexTree<T>();
-    for (T element : this.toList()) {
-      if (!secondTree.contains(element)) toReturn.add(element);
-    }
-    for (T element : secondTree.toList()) {
-      if (!this.contains(element)) toReturn.add(element);
-    }
-    return toReturn;
   }
 }

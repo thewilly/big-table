@@ -11,12 +11,12 @@ import java.util.LinkedList;
  *
  * @param <T> the type parameter
  */
-public class TimeSeriesOrderedData<T extends Comparable<T>> implements VersionableDataArray<T> {
+public class TimeSeriesOrderedData implements VersionableDataArray {
 
   /** The Log. */
   final Logger log = LoggerFactory.getLogger(TimeSeriesOrderedData.class);
 
-  private final LinkedList<VersionableData<T>> _dataVersions;
+  private final LinkedList<VersionableData> _dataVersions;
   private final int _numberOfVersionsToStore;
 
   /** Instantiates a new Time series ordered data. */
@@ -40,7 +40,7 @@ public class TimeSeriesOrderedData<T extends Comparable<T>> implements Versionab
    *
    * @return the all data
    */
-  public Collection<VersionableData<T>> getAllVersions() {
+  public Collection<VersionableData> getAllVersions() {
     log.debug("Getting all the versions from a time series ordered data.");
     return _dataVersions;
   }
@@ -51,7 +51,7 @@ public class TimeSeriesOrderedData<T extends Comparable<T>> implements Versionab
    * @return the most recent data
    */
   @Override
-  public VersionableData<T> getMostRecentVersion() {
+  public VersionableData getMostRecentVersion() {
     log.debug("Getting last version from a time series ordered data.");
     return _dataVersions.getLast();
   }
@@ -68,16 +68,18 @@ public class TimeSeriesOrderedData<T extends Comparable<T>> implements Versionab
    * @return the boolean
    */
   @Override
-  public boolean addVersion(VersionableData<T> data) {
+  public VersionableData addVersion(VersionableData data) {
     log.debug("Adding {} to the time series ordered data.", data);
-    _dataVersions.getLast().invalidate();
-    boolean addResult = _dataVersions.add(data);
+    VersionableData previousData = _dataVersions.getLast();
+    previousData.invalidate();
+
+    _dataVersions.add(data); // Adding the data to the array.
 
     if (getNumberOfVersionsStored() > _numberOfVersionsToStore) {
       _dataVersions.removeFirst();
       log.debug("Removing the oldest element from a time series ordered data.");
     }
 
-    return addResult;
+    return previousData;
   }
 }

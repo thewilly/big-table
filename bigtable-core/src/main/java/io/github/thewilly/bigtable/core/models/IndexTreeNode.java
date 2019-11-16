@@ -2,28 +2,24 @@ package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
 
-/**
- * The type Index tree node.
- *
- * @param <T> the type parameter
- */
-public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
+/** The type Index tree node. */
+public class IndexTreeNode implements Serializable {
 
   /** The right. */
-  private IndexTreeNode<T> left, right;
+  private IndexTreeNode left, right;
 
   /** The height. */
   private int height;
 
   /** The content. */
-  private T content;
+  private IndexNode content;
 
   /**
    * Instantiates a new AVL node.
    *
    * @param content the content
    */
-  public IndexTreeNode(T content) {
+  IndexTreeNode(IndexNode content) {
     this.content = content;
     left = null;
     right = null;
@@ -36,7 +32,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    * @param left the left
    * @param right the right
    */
-  public IndexTreeNode(T content, IndexTreeNode<T> left, IndexTreeNode<T> right) {
+  public IndexTreeNode(IndexNode content, IndexTreeNode left, IndexTreeNode right) {
     this.content = content;
     setLeft(left);
     setRight(right);
@@ -47,7 +43,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @return the content
    */
-  public T getContent() {
+  IndexNode getContent() {
     return this.content;
   }
 
@@ -56,7 +52,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @param content the new content
    */
-  public void setContent(T content) {
+  void setContent(IndexNode content) {
     this.content = content;
   }
 
@@ -65,7 +61,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @return the height
    */
-  public int getHeight() {
+  private int getHeight() {
     updateHeight();
     return this.height;
   }
@@ -75,7 +71,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @param height the new height
    */
-  public void setHeight(int height) {
+  private void setHeight(int height) {
     if (height < 0) throw new IllegalArgumentException("The height must be possitive");
     this.height = height;
   }
@@ -85,17 +81,8 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @return the left
    */
-  public IndexTreeNode<T> getLeft() {
+  IndexTreeNode getLeft() {
     return this.left;
-  }
-
-  /**
-   * Gets the right.
-   *
-   * @return the right
-   */
-  public IndexTreeNode<T> getRight() {
-    return this.right;
   }
 
   /**
@@ -103,8 +90,17 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @param left the new left
    */
-  public void setLeft(IndexTreeNode<T> left) {
+  void setLeft(IndexTreeNode left) {
     this.left = left;
+  }
+
+  /**
+   * Gets the right.
+   *
+   * @return the right
+   */
+  IndexTreeNode getRight() {
+    return this.right;
   }
 
   /**
@@ -112,7 +108,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @param right the new right
    */
-  public void setRight(IndexTreeNode<T> right) {
+  void setRight(IndexTreeNode right) {
     this.right = right;
   }
 
@@ -130,7 +126,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
   }
 
   /** Update height. */
-  protected void updateHeight() {
+  void updateHeight() {
     // If the node doesn't have children, its height is just 0
     if (getLeft() == null && getRight() == null) setHeight(0);
 
@@ -150,7 +146,7 @@ public class IndexTreeNode<T extends Comparable<T>> implements Serializable {
    *
    * @return the balance factor
    */
-  public int getBalanceFactor() {
+  int getBalanceFactor() {
     return computeBF();
   }
 

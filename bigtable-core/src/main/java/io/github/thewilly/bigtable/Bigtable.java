@@ -42,6 +42,17 @@ public class Bigtable<T extends Comparable<T>> implements Serializable {
   }
 
   /**
+   * Of create bigtable.
+   *
+   * @param <T> the type parameter
+   * @param tableId the table id
+   * @return the create bigtable
+   */
+  public static <T extends Comparable<T>> CreateBigtable<T> of(String tableId) {
+    return new CreateBigtable<T>().withName(tableId);
+  }
+
+  /**
    * Gets index.
    *
    * @param indexIdentifier the index identifier
@@ -61,16 +72,5 @@ public class Bigtable<T extends Comparable<T>> implements Serializable {
     if (_indexes.size() == _numberOfIndexes) return false;
     _indexes.put(index.getIndexIdentifier(), index);
     return true;
-  }
-
-  /**
-   * Of create bigtable.
-   *
-   * @param <T> the type parameter
-   * @param tableId the table id
-   * @return the create bigtable
-   */
-  public static <T extends Comparable<T>> CreateBigtable<T> of(String tableId) {
-    return new CreateBigtable<T>().withName(tableId);
   }
 }

@@ -13,11 +13,10 @@ public class RowMutation {
   }
 
   /**
-   * Create row mutation.
+   * Creates a row mutation object.
    *
-   * @param <T> the type parameter
    * @param table the table
-   * @return the row mutation
+   * @return the row mutation object ready to perform any operation.
    */
   public static RowMutation create(TableRow table) {
     return new RowMutation(table);

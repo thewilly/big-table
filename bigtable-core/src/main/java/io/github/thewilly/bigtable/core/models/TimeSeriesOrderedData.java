@@ -5,11 +5,11 @@ import com.sun.org.slf4j.internal.LoggerFactory;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
 /**
  * The type Time series ordered data.
  *
- * @param <T> the type parameter
  */
 public class TimeSeriesOrderedData implements VersionableDataArray {
 
@@ -40,9 +40,9 @@ public class TimeSeriesOrderedData implements VersionableDataArray {
    *
    * @return the all data
    */
-  public Collection<VersionableData> getAllVersions() {
+  public Stream<VersionableData> getAllVersions() {
     log.debug("Getting all the versions from a time series ordered data.");
-    return _dataVersions;
+    return _dataVersions.parallelStream();
   }
 
   /**

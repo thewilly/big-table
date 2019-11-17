@@ -26,8 +26,8 @@ public class Index implements Serializable {
    * @param table the table
    * @return the index
    */
-  public static <T extends Comparable<T>> Index create(
-      String id, IndexAlgorithm indexAlgorithm, TableImpl<T> table) {
+  public static Index create(
+      String id, IndexAlgorithm indexAlgorithm, TableImpl table) {
     Index index = new Index(id, indexAlgorithm);
 
     table.getRows()

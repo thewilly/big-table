@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  *
  * @param <T> the type parameter
  */
-public class TableImpl<T extends Comparable<T>> implements Table<T> {
+public class TableImpl implements Table {
 
   private final Logger log = LoggerFactory.getLogger(TableImpl.class);
 
@@ -65,7 +65,7 @@ public class TableImpl<T extends Comparable<T>> implements Table<T> {
    * @param filter the filter
    * @return the stream
    */
-  public Stream<TableRow<T>> scanTableAsync(Predicate<TableRow<T>> filter) {
+  public Stream<TableRow> scanTableAsync(Predicate<TableRow> filter) {
     return _rows.parallelStream().filter(filter);
   }
 }

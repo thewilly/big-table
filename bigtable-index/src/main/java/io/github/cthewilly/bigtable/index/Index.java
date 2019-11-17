@@ -46,7 +46,7 @@ public class Index implements Serializable {
   public IndexNode find(String indexKey) {
     Cell auxCell = new RowCell("");
     Row row = new TableRow(1);
-    return _localizers.getIfPresent(IndexNode.of(indexKey, auxCell));
+    return _localizers.getIfPresent(IndexNode.of(indexKey, row));
   }
 
   /**

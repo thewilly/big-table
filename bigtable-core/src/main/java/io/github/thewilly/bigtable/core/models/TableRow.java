@@ -15,7 +15,7 @@ public class TableRow implements Row {
 
   private final Cell[] _rowCells;
 
-  private TableRow(int size) {
+  public TableRow(int size) {
     _rowCells = new RowCell[size];
   }
 

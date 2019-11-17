@@ -1,6 +1,7 @@
 package io.github.thewilly.bigtable.core.models;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
@@ -21,7 +22,13 @@ public interface Table extends Serializable {
    *
    * @return the rows
    */
-  Stream<TableRow> getRows();
+  Stream<Row> stream();
+
+  /**
+   *
+   * @return
+   */
+  Collection<Row> getRows();
 
   /**
    * Gets columns.
@@ -29,4 +36,16 @@ public interface Table extends Serializable {
    * @return the columns
    */
   Stream<String> getColumns();
+
+  /**
+   *
+   * @return
+   */
+  int getNumberOfColumns();
+
+  /**
+   *
+   * @return
+   */
+  int getNumberOfRows();
 }

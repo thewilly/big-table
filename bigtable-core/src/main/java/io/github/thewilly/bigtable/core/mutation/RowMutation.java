@@ -1,6 +1,7 @@
 package io.github.thewilly.bigtable.core.mutation;
 
 import io.github.thewilly.bigtable.core.models.TableRow;
+import io.github.thewilly.bigtable.core.models.VersionableData;
 
 /** The type Row mutation. */
 public class RowMutation {
@@ -23,14 +24,14 @@ public class RowMutation {
   }
 
   /**
-   * Update cell boolean.
+   * Updates a cell by adding a data version to it. If the cell had content on it previously will
+   * return the last version.
    *
-   * @param <T> the type parameter
-   * @param columnQualifier the column qualifier
-   * @param value the value
-   * @return the boolean
+   * @param columnQualifier is the column name of the cell in the current row to update.
+   * @param data is the data to add to the cell versions.
+   * @return the previous data stored in the cell. If no previous data null.
    */
-  public <T extends Comparable<T>> boolean updateCell(String columnQualifier, T value) {
-    return _rowToMutate.getCellForColumnQualifier(columnQualifier).set(value);
+  public VersionableData updateCell(String columnQualifier, VersionableData data) {
+    return _rowToMutate.getCellForColumnQualifier(columnQualifier).addDataVersion(data);
   }
 }

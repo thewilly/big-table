@@ -1,5 +1,6 @@
 package io.github.cthewilly.bigtable.index;
 
+import io.github.thewilly.bigtable.core.BigtableTable;
 import io.github.thewilly.bigtable.core.models.*;
 
 import java.io.Serializable;
@@ -27,7 +28,7 @@ public class IndexImpl implements Serializable {
    * @return the index
    */
   public static IndexImpl create(
-      String id, IndexAlgorithm indexAlgorithm, TableImpl table) {
+      String id, IndexAlgorithm indexAlgorithm, BigtableTable table) {
     IndexImpl index = new IndexImpl(id, indexAlgorithm);
 
     table.getRows()

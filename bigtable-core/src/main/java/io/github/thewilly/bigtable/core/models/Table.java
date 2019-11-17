@@ -6,9 +6,8 @@ import java.util.stream.Stream;
 /**
  * The interface Table.
  *
- * @param <T> the type parameter
  */
-public interface Table<T extends Comparable<T>> extends Serializable {
+public interface Table extends Serializable {
 
   /**
    * Gets table id.

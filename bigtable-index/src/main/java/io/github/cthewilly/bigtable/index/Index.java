@@ -1,69 +1,40 @@
 package io.github.cthewilly.bigtable.index;
 
-import io.github.thewilly.bigtable.core.models.*;
-
 import java.io.Serializable;
+import java.util.stream.Stream;
 
-/** The type Index. @param <ValueType> the type parameter @param <ValueType> the type parameter */
-public class Index implements Serializable {
-
-  private final String _id;
-  private final IndexTree _localizers;
-  private final IndexAlgorithm _indexAlgorithm;
-
-  private Index(String id, IndexAlgorithm indexAlgorithm) {
-    _id = id;
-    _localizers = new IndexTree();
-    _indexAlgorithm = indexAlgorithm;
-  }
+/**
+ * @author Guillermo Facundo Colunga (@thewilly)
+ */
+public interface Index extends Serializable {
 
   /**
-   * Create index.
+   * Gets the index unique identifier.
    *
-   * @param <T> the type parameter
-   * @param id the id
-   * @param indexAlgorithm the index algorithm
-   * @param table the table
-   * @return the index
+   * @return the string containing the index unique identifier.
    */
-  public static Index create(
-      String id, IndexAlgorithm indexAlgorithm, TableImpl table) {
-    Index index = new Index(id, indexAlgorithm);
-
-    table.getRows()
-        .map(index._indexAlgorithm::indexRow)
-        .forEach(localizer -> localizer.forEach(index._localizers::add));
-
-    return index;
-  }
+  String getId();
 
   /**
-   * Find table row localizer.
+   * Gets the index algorithm that is being used to index data.
    *
-   * @param indexKey the index key
-   * @return the table row localizer
+   * @return the index algorithm that is being used to index data.
    */
-  public IndexNode find(String indexKey) {
-    Cell auxCell = new RowCell("");
-    Row row = new TableRow(1);
-    return _localizers.getIfPresent(IndexNode.of(indexKey, row));
-  }
+  IndexAlgorithm getIndexAlgorithm();
 
   /**
-   * Gets id.
+   * Gets all the nodes in the index as an stream so they can be processed without loading them in
+   * to memory.
    *
-   * @return the id
+   * @return the stream containing all the nodes that compose the index.
    */
-  public String getId() {
-    return _id;
-  }
+  Stream<IndexNode> stream();
 
   /**
-   * Gets index algorithm.
+   * Gets the index node indexed with the given indexKey.
    *
-   * @return the index algorithm
+   * @param indexKey to search for the indexNode.
+   * @return the index node if present. Null otherwise.
    */
-  public IndexAlgorithm getIndexAlgorithm() {
-    return _indexAlgorithm;
-  }
+  IndexNode find(String indexKey);
 }

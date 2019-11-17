@@ -1,7 +1,9 @@
-package io.github.thewilly.bigtable.core.models;
+package io.github.thewilly.bigtable.core;
 
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
+import io.github.thewilly.bigtable.core.models.Row;
+import io.github.thewilly.bigtable.core.models.Table;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,14 +15,13 @@ import java.util.stream.Stream;
 /**
  * The type Table.
  *
- * @param <T> the type parameter
  */
-public class TableImpl implements Table {
+public class BigtableTable implements Table {
 
-  private final Logger log = LoggerFactory.getLogger(TableImpl.class);
+  private final Logger log = LoggerFactory.getLogger(BigtableTable.class);
 
   private final String _id;
-  private final List<TableRow> _rows;
+  private final List<Row> _rows;
   private final List<String> _columnQualifiers;
 
   /**
@@ -28,7 +29,7 @@ public class TableImpl implements Table {
    *
    * @param id the id
    */
-  public TableImpl(String id) {
+  public BigtableTable(String id) {
     _id = id;
     _rows = new CopyOnWriteArrayList<>();
     _columnQualifiers = new CopyOnWriteArrayList<>();
@@ -40,13 +41,26 @@ public class TableImpl implements Table {
   }
 
   @Override
-  public Stream<TableRow> getRows() {
+  public Stream<Row> stream() {
     return _rows.parallelStream();
   }
 
   @Override
+  public Collection<Row> getRows() { return _rows; }
+
+  @Override
   public Stream<String> getColumns() {
     return _columnQualifiers.parallelStream();
+  }
+
+  @Override
+  public int getNumberOfColumns() {
+    return _columnQualifiers.size();
+  }
+
+  @Override
+  public int getNumberOfRows() {
+    return _rows.size();
   }
 
   /**
@@ -55,7 +69,7 @@ public class TableImpl implements Table {
    * @param filter the filter
    * @return the list
    */
-  public List<TableRow> scanTable(Predicate<TableRow> filter) {
+  public List<Row> scanTable(Predicate<Row> filter) {
     return scanTableAsync(filter).collect(Collectors.toList());
   }
 
@@ -65,7 +79,7 @@ public class TableImpl implements Table {
    * @param filter the filter
    * @return the stream
    */
-  public Stream<TableRow> scanTableAsync(Predicate<TableRow> filter) {
+  public Stream<Row> scanTableAsync(Predicate<Row> filter) {
     return _rows.parallelStream().filter(filter);
   }
 }

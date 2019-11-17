@@ -6,6 +6,7 @@ import com.sun.org.slf4j.internal.LoggerFactory;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /** The type Table row. */
 public class TableRow implements Row {
@@ -46,11 +47,11 @@ public class TableRow implements Row {
   }
 
   @Override
-  public Iterable<Cell> cells() {
+  public Stream<Cell> stream() {
     List<Cell> cells = Arrays.asList(_rowCells);
     cells.sort(Cell.DEFAULT_COMPARATOR);
 
-    return cells;
+    return cells.parallelStream();
   }
 
   @Override

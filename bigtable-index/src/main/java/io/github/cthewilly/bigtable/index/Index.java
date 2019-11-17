@@ -1,4 +1,6 @@
-package io.github.thewilly.bigtable.core.models;
+package io.github.cthewilly.bigtable.index;
+
+import io.github.thewilly.bigtable.core.models.*;
 
 import java.io.Serializable;
 
@@ -28,9 +30,7 @@ public class Index implements Serializable {
       String id, IndexAlgorithm indexAlgorithm, TableImpl<T> table) {
     Index index = new Index(id, indexAlgorithm);
 
-    table
-        .getRows()
-        .parallelStream()
+    table.getRows()
         .map(index._indexAlgorithm::indexRow)
         .forEach(localizer -> localizer.forEach(index._localizers::add));
 
@@ -45,6 +45,7 @@ public class Index implements Serializable {
    */
   public IndexNode find(String indexKey) {
     Cell auxCell = new RowCell("");
+    Row row = new TableRow(1);
     return _localizers.getIfPresent(IndexNode.of(indexKey, auxCell));
   }
 

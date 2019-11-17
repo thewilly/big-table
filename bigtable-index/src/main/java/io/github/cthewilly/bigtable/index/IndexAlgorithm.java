@@ -1,4 +1,6 @@
-package io.github.thewilly.bigtable.core.models;
+package io.github.cthewilly.bigtable.index;
+
+import io.github.thewilly.bigtable.core.models.TableRow;
 
 import java.util.stream.Stream;
 

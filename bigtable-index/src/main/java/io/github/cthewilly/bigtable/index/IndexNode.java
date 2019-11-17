@@ -1,7 +1,8 @@
-package io.github.thewilly.bigtable.core.models;
+package io.github.cthewilly.bigtable.index;
+
+import io.github.thewilly.bigtable.core.models.Row;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,11 +10,11 @@ import java.util.List;
 public class IndexNode implements Serializable, Comparable<IndexNode> {
 
   private final String _indexKey;
-  private final List<Row> _value;
+  private final List<Row> _indexedRows;
 
   private IndexNode(String key, List<Row> value) {
     _indexKey = key;
-    _value = value;
+    _indexedRows = value;
   }
 
   /**
@@ -23,8 +24,8 @@ public class IndexNode implements Serializable, Comparable<IndexNode> {
    * @param value the position
    * @return the table row localizer
    */
-  public static IndexNode of(String key, List<Row> value) {
-    return new IndexNode(key, value);
+  public static IndexNode of(String key, List<Row> indexedValues) {
+    return new IndexNode(key, indexedValues);
   }
 
   /**
@@ -34,8 +35,8 @@ public class IndexNode implements Serializable, Comparable<IndexNode> {
    * @param value the position
    * @return the table row localizer
    */
-  public static IndexNode of(String key, Row value) {
-    return new IndexNode(key, Arrays.asList(value));
+  public static IndexNode of(String key, Row indexedValue) {
+    return new IndexNode(key, Arrays.asList(indexedValue));
   }
 
   /**
@@ -44,7 +45,7 @@ public class IndexNode implements Serializable, Comparable<IndexNode> {
    * @return the position
    */
   public List<Row> getIndexedRows() {
-    return _value;
+    return _indexedRows;
   }
 
   /**

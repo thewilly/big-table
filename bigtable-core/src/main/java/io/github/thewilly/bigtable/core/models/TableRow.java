@@ -47,6 +47,11 @@ public class TableRow implements Row {
   }
 
   @Override
+  public Iterable<Cell> iterable() {
+    return Arrays.asList(_rowCells);
+  }
+
+  @Override
   public Stream<Cell> stream() {
     List<Cell> cells = Arrays.asList(_rowCells);
     cells.sort(Cell.DEFAULT_COMPARATOR);
@@ -67,6 +72,10 @@ public class TableRow implements Row {
 
   @Override
   public Cell getCell(String columnQualifier) {
+    for(Cell cell : _rowCells) {
+      if(cell.getColumnQualifier().equals(columnQualifier))
+        return cell;
+    }
     return null;
   }
 }

@@ -18,7 +18,7 @@ public class RowMutation {
    * @param table the table
    * @return the row mutation
    */
-  public static <T extends Comparable<T>> RowMutation create(TableRow<T> table) {
+  public static RowMutation create(TableRow table) {
     return new RowMutation(table);
   }
 

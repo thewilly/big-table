@@ -1,6 +1,6 @@
 package io.github.cthewilly.bigtable.index;
 
-import io.github.thewilly.bigtable.core.models.TableRow;
+import io.github.thewilly.bigtable.core.models.Row;
 
 import java.util.stream.Stream;
 
@@ -13,5 +13,5 @@ public interface IndexAlgorithm {
    * @param row the row
    * @return the list
    */
-  Stream<IndexNode> indexRow(TableRow row);
+  Stream<IndexNode> indexRow(Row row);
 }

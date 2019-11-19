@@ -181,6 +181,7 @@ public class IndexTree implements Tree {
     } else if (root == null) {
       return new IndexTreeNode(content);
     } else if (root.getContent().equals(content)) {
+      // If the node already exists in the tree we add the indexed rows to it.
       root.getContent().getIndexedRows().addAll(content.getIndexedRows());
     } else if (content.compareTo(root.getContent()) < 0) {
       root.setLeft(add(root.getLeft(), content));

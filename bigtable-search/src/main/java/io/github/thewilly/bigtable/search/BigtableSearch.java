@@ -1,7 +1,8 @@
 package io.github.thewilly.bigtable.search;
 
-import io.github.thewilly.bigtable.Bigtable;
-import io.github.thewilly.bigtable.index.row.BigtableIndexRow;
+import io.github.thewilly.bigtable.index.Index;
+import io.github.thewilly.bigtable.core.models.Row;
+import io.github.thewilly.bigtable.core.models.Table;
 
 import java.util.stream.Stream;
 
@@ -13,22 +14,22 @@ import java.util.stream.Stream;
 public abstract class BigtableSearch<T extends Comparable<T>> {
 
   /** The Table. */
-  protected final Bigtable<T> _table;
+  protected final Table _table;
 
   /**
    * Instantiates a new Bigtable search.
    *
    * @param table the table
    */
-  public BigtableSearch(Bigtable<T> table) {
+  public BigtableSearch(Table table) {
     _table = table;
   }
 
   /**
-   * Read rows stream.
+   * Finds the indexed rows under the given key.
    *
-   * @param indexIdentifier the index identifier
-   * @return the stream
+   * @param indexToExecuteTheSearch is the index where we will execute the search operation.
+   * @return an stream containing all the hits.
    */
-  public abstract Stream<BigtableIndexRow<T>> readRows(String indexIdentifier);
+  public abstract Stream<Row> findIndexedRows(Index indexToExecuteTheSearch);
 }

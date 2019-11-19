@@ -30,8 +30,8 @@ public class IndexImpl implements Serializable {
   public static IndexImpl create(
       String id, IndexAlgorithm indexAlgorithm, BigtableTable table) {
     IndexImpl index = new IndexImpl(id, indexAlgorithm);
-
-    table.getRows()
+    
+    table.stream()
         .map(index._indexAlgorithm::indexRow)
         .forEach(localizer -> localizer.forEach(index._localizers::add));
 

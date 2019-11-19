@@ -181,7 +181,7 @@ public class IndexTree implements Tree {
     } else if (root == null) {
       return new IndexTreeNode(content);
     } else if (root.getContent().equals(content)) {
-      throw new IllegalArgumentException("No repeated elements are allowed inside a tree.");
+      root.getContent().getIndexedRows().addAll(content.getIndexedRows());
     } else if (content.compareTo(root.getContent()) < 0) {
       root.setLeft(add(root.getLeft(), content));
     } else {

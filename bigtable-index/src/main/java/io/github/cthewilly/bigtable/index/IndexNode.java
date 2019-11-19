@@ -21,7 +21,6 @@ public class IndexNode implements Serializable, Comparable<IndexNode> {
    * Of table row localizer.
    *
    * @param key the key
-   * @param value the position
    * @return the table row localizer
    */
   public static IndexNode of(String key, List<Row> indexedValues) {
@@ -32,7 +31,6 @@ public class IndexNode implements Serializable, Comparable<IndexNode> {
    * Of table row localizer.
    *
    * @param key the key
-   * @param value the position
    * @return the table row localizer
    */
   public static IndexNode of(String key, Row indexedValue) {

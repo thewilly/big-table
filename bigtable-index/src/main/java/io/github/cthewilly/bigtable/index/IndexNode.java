@@ -59,4 +59,14 @@ public class IndexNode implements Serializable, Comparable<IndexNode> {
   public int compareTo(IndexNode o) {
     return _indexKey.compareTo(o._indexKey);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if(o == null) return false;
+    if(this == o) return true;
+    if(!(o instanceof IndexNode)) return false;
+
+    IndexNode toCompare = (IndexNode) o;
+    return this.getIndexKey().equals(toCompare);
+  }
 }

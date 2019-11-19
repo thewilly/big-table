@@ -1,4 +1,4 @@
-package io.github.cthewilly.bigtable.index;
+package io.github.thewilly.bigtable.index;
 
 import java.util.ArrayList;
 import java.util.Collections;

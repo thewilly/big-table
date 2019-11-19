@@ -1,4 +1,4 @@
-package io.github.cthewilly.bigtable.index;
+package io.github.thewilly.bigtable.index;
 
 import java.io.Serializable;
 import java.util.stream.Stream;

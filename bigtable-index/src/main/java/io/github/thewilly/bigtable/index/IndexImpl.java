@@ -1,4 +1,4 @@
-package io.github.cthewilly.bigtable.index;
+package io.github.thewilly.bigtable.index;
 
 import io.github.thewilly.bigtable.core.BigtableTable;
 import io.github.thewilly.bigtable.core.models.*;

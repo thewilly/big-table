@@ -18,8 +18,10 @@ public class AbstrctSearchTest {
       RowCell rc = new RowCell("c_1");
 
       for(int i = 1; i < 1000; i++) {
-          TableRow tr = new TableRow(1);
+          TableRow tr = new TableRow(rc);
           RowMutation rm = RowMutation.create(tr);
+
+
           VersionableData d = new VersionableData() {
 
               ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);

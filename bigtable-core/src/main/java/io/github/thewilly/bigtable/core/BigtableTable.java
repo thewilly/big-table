@@ -1,9 +1,10 @@
 package io.github.thewilly.bigtable.core;
 
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+
 import io.github.thewilly.bigtable.core.models.Row;
 import io.github.thewilly.bigtable.core.models.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;

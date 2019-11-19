@@ -14,6 +14,12 @@ repositories {
 dependencies {
     compile project(':bigtable-core')
     compile project(':bigtable-index')
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.2'
+
+
     compile 'com.google.guava:guava:27.1-jre'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'

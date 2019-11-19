@@ -1,7 +1,9 @@
 package io.github.thewilly.bigtable.core.models;
 
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -17,6 +19,10 @@ public class TableRow implements Row {
 
   public TableRow(int size) {
     _rowCells = new RowCell[size];
+  }
+
+  public TableRow(Cell... cells) {
+    _rowCells = cells;
   }
 
   /**

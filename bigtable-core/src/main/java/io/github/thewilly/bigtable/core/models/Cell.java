@@ -47,5 +47,5 @@ public interface Cell extends Serializable, Comparable<Cell> {
    * @param data is the data version to add to the cell.
    * @return the previous version of the data stored or null if none.
    */
-  VersionableData addDataVersion(VersionableData data);
+  DataVersion addDataVersion(DataVersion data);
 }

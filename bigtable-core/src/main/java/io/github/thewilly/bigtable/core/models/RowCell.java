@@ -21,7 +21,7 @@ public class RowCell implements Cell {
    * @param columnQualifier the column qualifier
    */
   public RowCell(String columnQualifier) {
-    _cellData = new TimeSeriesOrderedData();
+    _cellData = new TimeSeriesOrderedDataArray();
     _columnQualifier = columnQualifier;
     this.timestamp = System.currentTimeMillis();
     log.debug("Table cell created.");
@@ -52,7 +52,7 @@ public class RowCell implements Cell {
   }
 
   @Override
-  public VersionableData addDataVersion(VersionableData data) {
+  public DataVersion addDataVersion(DataVersion data) {
     log.debug("Added {} to the table cell.", data);
     return _cellData.addVersion(data);
   }

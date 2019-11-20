@@ -1,8 +1,11 @@
 package io.github.thewilly.bigtable.core.mutation;
 
-import io.github.thewilly.bigtable.core.models.Table;
 import io.github.thewilly.bigtable.core.BigtableTable;
+import io.github.thewilly.bigtable.core.models.Cell;
+import io.github.thewilly.bigtable.core.models.Table;
 import io.github.thewilly.bigtable.core.models.TableRow;
+
+import java.util.Collection;
 
 /** The type Table mutation. */
 public class TableMutation {
@@ -31,17 +34,18 @@ public class TableMutation {
    * @return the boolean
    */
   public <T extends Comparable<T>> boolean addRow(TableRow row) {
-    if (row.getCells().length == _tableToMutate.getNumberOfColumns()) {
-      _tableToMutate.getRows().add(row);
-      return true;
-    }
-    return false;
+    _tableToMutate.getRows().add(row);
+    Collection<String> columnsInTable = _tableToMutate.accessColumns();
+    for (Cell cell : row.getCells()) {
+      if (!columnsInTable.contains(cell.getColumnQualifier())) {
+        _tableToMutate.accessColumns().add(cell.getColumnQualifier());
+      }
+    } return true;
   }
 
   /**
    * Remove row boolean.
    *
-   * @param <T> the type parameter
    * @param row the row
    * @return the boolean
    */

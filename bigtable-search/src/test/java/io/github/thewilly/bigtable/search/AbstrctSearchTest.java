@@ -1,62 +1,43 @@
 package io.github.thewilly.bigtable.search;
 
 import io.github.thewilly.bigtable.core.BigtableTable;
-import io.github.thewilly.bigtable.core.models.*;
+import io.github.thewilly.bigtable.core.models.DataVersion;
+import io.github.thewilly.bigtable.core.models.RowCell;
+import io.github.thewilly.bigtable.core.models.TableRow;
+import io.github.thewilly.bigtable.core.models.TimeSeriesOrderedData;
 import io.github.thewilly.bigtable.core.mutation.RowMutation;
+import io.github.thewilly.bigtable.core.mutation.TableMutation;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.nio.ByteBuffer;
 
 public class AbstrctSearchTest {
 
   protected final BigtableTable table = new BigtableTable("test-table");
 
-
   @Before
   public void setUp() {
-      RowCell rc = new RowCell("c_1");
+    TableRow tr = null;
+    RowCell rc = new RowCell("c_1");
 
-      for(int i = 1; i < 1000; i++) {
-          TableRow tr = new TableRow(rc);
-          RowMutation rm = RowMutation.create(tr);
+    TableMutation tm = TableMutation.create(table);
 
+    for (int i = 1; i < 1000; i++) {
+      rc = new RowCell("c_1"+i);
+      tr = new TableRow(rc);
+      RowMutation rm = RowMutation.create(tr);
 
-          VersionableData d = new VersionableData() {
+      DataVersion data = new TimeSeriesOrderedData(new byte[1]);
 
-              ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-              long timeStamp = System.currentTimeMillis();
-              byte[] data = buffer.putLong(timeStamp).array();
-              boolean valid = true;
+      rm.updateCell("c_1", data);
 
-              @Override
-              public boolean isValid() {
-                  return valid;
-              }
-
-              @Override
-              public void invalidate() {
-                  valid = false;
-              }
-
-              @Override
-              public long getTimestampt() {
-                  return timeStamp;
-              }
-
-              @Override
-              public byte[] get() {
-                  return data;
-              }
-          };
-          rm.updateCell("c_1", d);
-
-          table.getRows().add(tr);
-      }
+      tm.addRow(tr);
+    }
   }
 
   @Test
   public void testUniqueSearch() {
-    System.out.println(table.getNumberOfColumns());
+    System.out.println("Columns -> " + table.getNumberOfColumns());
+    System.out.println("Rows -> " + table.getNumberOfRows());
+    System.out.println(table);
   }
 }

@@ -41,6 +41,12 @@ public interface Table extends Serializable {
    *
    * @return
    */
+  Collection<String> accessColumns();
+
+  /**
+   *
+   * @return
+   */
   int getNumberOfColumns();
 
   /**

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
@@ -55,6 +56,11 @@ public class BigtableTable implements Table {
   }
 
   @Override
+  public Collection<String> accessColumns() {
+    return _columnQualifiers;
+  }
+
+  @Override
   public int getNumberOfColumns() {
     return _columnQualifiers.size();
   }
@@ -82,5 +88,31 @@ public class BigtableTable implements Table {
    */
   public Stream<Row> scanTableAsync(Predicate<Row> filter) {
     return _rows.parallelStream().filter(filter);
+  }
+
+  @Override
+  public String toString() {
+
+    StringBuilder sb = new StringBuilder();
+
+    _columnQualifiers.sort(new Comparator<String>() {
+      @Override
+      public int compare(String s, String t1) {
+        return s.compareTo(t1);
+      }
+    });
+
+    for(String s : _columnQualifiers) {
+      sb.append(s.toUpperCase());
+      sb.append("\t\t");
+    }
+    sb.append("\n");
+
+    for(Row row : _rows) {
+      sb.append(row);
+      sb.append("\n");
+    }
+
+    return sb.toString();
   }
 }

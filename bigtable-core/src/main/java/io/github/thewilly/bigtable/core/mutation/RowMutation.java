@@ -1,7 +1,11 @@
 package io.github.thewilly.bigtable.core.mutation;
 
+import io.github.thewilly.bigtable.core.models.Cell;
+import io.github.thewilly.bigtable.core.models.RowCell;
 import io.github.thewilly.bigtable.core.models.TableRow;
-import io.github.thewilly.bigtable.core.models.VersionableData;
+import io.github.thewilly.bigtable.core.models.DataVersion;
+
+import java.util.Objects;
 
 /** The type Row mutation. */
 public class RowMutation {
@@ -30,7 +34,14 @@ public class RowMutation {
    * @param data is the data to add to the cell versions.
    * @return the previous data stored in the cell. If no previous data null.
    */
-  public VersionableData updateCell(String columnQualifier, VersionableData data) {
-    return _rowToMutate.getCellForColumnQualifier(columnQualifier).addDataVersion(data);
+  public DataVersion updateCell(String columnQualifier, DataVersion data) {
+    Cell cellToUpdate = _rowToMutate.getCellForColumnQualifier(columnQualifier);
+    if (Objects.isNull(cellToUpdate)) {
+      cellToUpdate = new RowCell(columnQualifier);
+      cellToUpdate.addDataVersion(data);
+      _rowToMutate.getCells().add(cellToUpdate);
+      return null; // Previous value was null
+    }
+      return _rowToMutate.getCellForColumnQualifier(columnQualifier).addDataVersion(data);
   }
 }

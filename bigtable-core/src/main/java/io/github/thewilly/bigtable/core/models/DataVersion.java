@@ -3,7 +3,7 @@ package io.github.thewilly.bigtable.core.models;
 import java.io.Serializable;
 
 /** The interface Data version. */
-public interface VersionableData extends Serializable {
+public interface DataVersion extends Serializable {
 
   /**
    * Is valid boolean. True if the data version is the most recent one, false otherwise.
